@@ -13,7 +13,7 @@ public class Finder {
 
         int debugLimit = 99999999;
 
-        BufferedImage big = Loader.load("1.png");
+        BufferedImage big = Loader.load("test1_same_gray_1.png");
         if (big == null) {
             System.out.println("big not found");
             return;
@@ -42,7 +42,7 @@ public class Finder {
                 for (Pretender p : pretenders) {
 
                     // мы все на той же горизонтали?
-                    boolean isSameHor = j == p.getInTest().getY();
+                    boolean isSameHor = j == p.getInBig().getY();
                     if (isSameHor) {
                         // в образце есть следующая точка?
                         LamePoint nextInTest = p.getInTest().nextHor();
@@ -55,11 +55,12 @@ public class Finder {
                                 removeBad(toRemove, p);
                             } else {
                                 // он хороший, продолжаем с ним работать, изменив содержимое
-                                keepGood(j, i, p, nextInTest);
+                                keepGood(p, nextInTest);
                             }
                         } else {
-                            // раз образец кончился (но мы еще на той же горизонтали в большом - то это не наш вариант
-                            removeBad(toRemove, p);
+                            // раз образец кончился (но мы еще на той же горизонтали в большом -
+                            // то значит, что он дожил до этого времени и он хороший
+                            // и он хороший,  но мы с ним просто не делаем ничего
                         }
 
                     } else {
@@ -80,10 +81,10 @@ public class Finder {
                                     removeBad(toRemove, p);
                                 } else {
                                     // он хороший, продолжаем с ним работать, изменив содержимое
-                                    keepGood(j, i, p, nextInTest);
+                                    keepGood(p, nextInTest);
                                 }
                             } else {
-                                removeBad(toRemove, p);
+                                //removeBad(toRemove, p);
                             }
 
 
@@ -121,7 +122,7 @@ public class Finder {
 
     }
 
-    private static void keepGood(int j, int i, Pretender p, LamePoint nextInTest) {
+    private static void keepGood(Pretender p, LamePoint nextInTest) {
         p.setInTest(nextInTest);
         p.incMatches();
     }

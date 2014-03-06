@@ -16,17 +16,52 @@ public class LamePoint {
     }
 
     public LamePoint(int x, int y) {
-
         this.x = x;
         this.y = y;
     }
 
-    public LamePoint nextHor(){
+    public LamePoint nextHor() {
         return new LamePoint(x + 1, y);
     }
 
-    public LamePoint nextVer(){
+    public LamePoint nextVer() {
         return new LamePoint(0, y + 1);
+    }
+
+    public LamePoint add(LamePoint p) {
+        if (p == null) {
+            return this;
+        }
+        return new LamePoint(x + p.getX(), y + p.getY());
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        LamePoint lamePoint = (LamePoint) o;
+
+        if (x != lamePoint.x) {
+            return false;
+        }
+        if (y != lamePoint.y) {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = x;
+        final int prime = 31;
+        result = prime * result + y;
+        return result;
     }
 
     @Override

@@ -9,11 +9,16 @@ public class Pretender {
     }
 
     public LamePoint getInBig() {
-        return inBig;
+        return born.add(inTest);
     }
 
     private LamePoint inTest;
-    private LamePoint inBig;
+
+    public LamePoint getBorn() {
+        return born;
+    }
+
+    private final LamePoint born;
     private int matches;
 
     public void incMatches() {
@@ -25,13 +30,9 @@ public class Pretender {
         this.inTest = inTest;
     }
 
-    public void setInBig(LamePoint inBig) {
-        this.inBig = inBig;
-    }
-
     public Pretender(LamePoint inTest, LamePoint inBig) {
         this.inTest = inTest;
-        this.inBig = inBig;
+        this.born = inBig;
         matches = 1;
     }
 
@@ -39,7 +40,8 @@ public class Pretender {
     public String toString() {
         return "Pretender{" +
                 "inTest=" + inTest +
-                ", inBig=" + inBig +
+                ", inBig=" + getInBig() +
+                ", born=" + born +
                 ", matches=" + matches +
                 '}';
     }
