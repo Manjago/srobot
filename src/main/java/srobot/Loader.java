@@ -24,12 +24,13 @@ public class Loader {
 
     public static void main(String[] args) throws IOException {
         BufferedImage image = load("1.png");
+        Color tr = new Color(255, 255, 255);
+        System.out.printf("%s %d\n", tr, tr.getRGB());
 
-        System.out.println(image.getTransparency());
 
         for(int i = 0; i < image.getWidth(); ++i){
             for (int j =0; j < image.getHeight(); ++j){
-                System.out.printf("i = %d, j = %d, color= %s\n", i, j, new Color(image.getRGB(i, j)));
+                System.out.printf("i = %d, j = %d, rgb = %d,  color= %s %s\n", i, j, image.getRGB(i, j), new Color(image.getRGB(i, j)));
             }
         }
     }

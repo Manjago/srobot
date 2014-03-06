@@ -12,7 +12,7 @@ import java.util.List;
 public class Finder {
     public static void main(String[] args) throws IOException {
 
-        BufferedImage big = Loader.load("test.png");
+        BufferedImage big = Loader.load("test1_2_small.png");
         if (big == null) {
             System.out.println("big not found");
             return;
@@ -25,7 +25,7 @@ public class Finder {
         }
 
 
-        int transp = new Color(255, 255, 255).getRGB();
+        int transp = 16777215;
         List<Pretender> pretenders = new ArrayList<>();
         List<Pretender> toRemove = new ArrayList<>();
 
@@ -41,7 +41,7 @@ public class Finder {
                     if (isSameHor) {
                         // в образце есть следующая точка?
                         LamePoint nextInTest = p.getInTest().nextHor();
-                        boolean hasNextTestHor = nextInTest.getX() <= (test.getHeight() - 1);
+                        boolean hasNextTestHor = nextInTest.getX() <= (test.getWidth() - 1);
                         if (hasNextTestHor) {
                             // раз есть - то можно проверять стандартным образом
                             int testRgb = test.getRGB(nextInTest.getX(), nextInTest.getY());
@@ -61,20 +61,27 @@ public class Finder {
                         // мы уже на новой горизонтали, ничего себе!
                         // если образец еще не кончился - мы этого ему не простим
                         LamePoint nextInTestHor = p.getInTest().nextHor();
-                        boolean hasNextTestHor = nextInTestHor.getX() <= (test.getHeight() - 1);
+                        boolean hasNextTestHor = nextInTestHor.getX() <= (test.getWidth()- 1);
                         if (hasNextTestHor) {
                             toRemove.add(p);
                         } else {
                             // и образец тоже кончился - пытаемся пересочить на следующую горизонталь и в образце
                             LamePoint nextInTest = p.getInTest().nextVer();
-                            int testRgb = test.getRGB(nextInTest.getX(), nextInTest.getY());
-                            boolean isGood = testRgb == transp || testRgb == rgb;
-                            if (!isGood) {
-                                toRemove.add(p);
+                            boolean hasNextTestVer = nextInTest.getY() <= (test.getHeight() - 1);
+                            if (hasNextTestVer){
+                                int testRgb = test.getRGB(nextInTest.getX(), nextInTest.getY());
+                                boolean isGood = testRgb == transp || testRgb == rgb;
+                                if (!isGood) {
+                                    toRemove.add(p);
+                                } else {
+                                    // он хороший, продолжаем с ним работать, изменив содержимое
+                                    p.setInTest(nextInTest);
+                                }
                             } else {
-                                // он хороший, продолжаем с ним работать, изменив содержимое
-                                p.setInTest(nextInTest);
+                                toRemove.add(p);
                             }
+
+
                         }
                     }
 
