@@ -9,6 +9,7 @@ import java.io.IOException;
 /**
  * Hello world!
  *
+ * alg0r 68 секунд профессионал
  */
 public class App 
 {
@@ -19,11 +20,12 @@ public class App
         ImageIO.write(image, "BMP", new File("c:/temp/screenShot.bmp"));
 
         Color c = new Color(101,201,155,255);
+        int rgb = c.getRGB();
 
         for(int i = 0; i < image.getWidth(); ++i){
             for (int j =0; j < image.getHeight(); ++j){
                 int a = image.getRGB(i, j);
-                if (a == 0xff65C99B){
+                if (a == rgb){
                     System.out.println("catched " + i + " " + j);
                 } else
                 {
