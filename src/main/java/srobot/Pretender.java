@@ -16,7 +16,7 @@ public class Pretender {
     private LamePoint inBig;
     private int matches;
 
-    public void inMatches() {
+    public void incMatches() {
         ++matches;
     }
 

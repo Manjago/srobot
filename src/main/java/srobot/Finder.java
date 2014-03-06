@@ -1,6 +1,5 @@
 package srobot;
 
-import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ public class Finder {
 
         int debugLimit = 1;
 
-        BufferedImage big = Loader.load("test1_2_small.png");
+        BufferedImage big = Loader.load("1.png");
         if (big == null) {
             System.out.println("big not found");
             return;
@@ -31,15 +30,16 @@ public class Finder {
         List<Pretender> pretenders = new ArrayList<>();
         List<Pretender> toRemove = new ArrayList<>();
 
-        for (int i = 0; i < big.getWidth(); ++i) {
-            for (int j = 0; j < big.getHeight(); ++j) {
+        for (int j = 0; j < big.getHeight(); ++j) {
+
+            for (int i = 0; i < big.getWidth(); ++i) {
                 int rgb = big.getRGB(i, j);
 
                 // проверяем старых претендеров
                 for (Pretender p : pretenders) {
 
                     // мы все на той же горизонтали?
-                    boolean isSameHor = i == p.getInBig().getX();
+                    boolean isSameHor = j == p.getInBig().getY();
                     if (isSameHor) {
                         // в образце есть следующая точка?
                         LamePoint nextInTest = p.getInTest().nextHor();
@@ -49,15 +49,14 @@ public class Finder {
                             int testRgb = test.getRGB(nextInTest.getX(), nextInTest.getY());
                             boolean isGood = testRgb == transp || testRgb == rgb;
                             if (!isGood) {
-                                toRemove.add(p);
+                                removeBad(toRemove, p);
                             } else {
                                 // он хороший, продолжаем с ним работать, изменив содержимое
-                                p.setInTest(nextInTest);
-                                p.inMatches();
+                                keepGood(j, i, p, nextInTest);
                             }
                         } else {
                             // раз образец кончился (но мы еще на той же горизонтали в большом - то это не наш вариант
-                            toRemove.add(p);
+                            removeBad(toRemove, p);
                         }
 
                     } else {
@@ -66,7 +65,7 @@ public class Finder {
                         LamePoint nextInTestHor = p.getInTest().nextHor();
                         boolean hasNextTestHor = nextInTestHor.getX() <= (test.getWidth()- 1);
                         if (hasNextTestHor) {
-                            toRemove.add(p);
+                            removeBad(toRemove, p);
                         } else {
                             // и образец тоже кончился - пытаемся пересочить на следующую горизонталь и в образце
                             LamePoint nextInTest = p.getInTest().nextVer();
@@ -75,14 +74,13 @@ public class Finder {
                                 int testRgb = test.getRGB(nextInTest.getX(), nextInTest.getY());
                                 boolean isGood = testRgb == transp || testRgb == rgb;
                                 if (!isGood) {
-                                    toRemove.add(p);
+                                    removeBad(toRemove, p);
                                 } else {
                                     // он хороший, продолжаем с ним работать, изменив содержимое
-                                    p.setInTest(nextInTest);
-                                    p.inMatches();
+                                    keepGood(j, i, p, nextInTest);
                                 }
                             } else {
-                                toRemove.add(p);
+                                removeBad(toRemove, p);
                             }
 
 
@@ -115,6 +113,17 @@ public class Finder {
         }
 
         System.out.printf("found %d pretenders", pretenders.size());
+        System.out.print(pretenders);
 
+    }
+
+    private static void keepGood(int j, int i, Pretender p, LamePoint nextInTest) {
+        p.setInTest(nextInTest);
+        p.setInBig(new LamePoint(i, j));
+        p.incMatches();
+    }
+
+    private static boolean removeBad(List<Pretender> toRemove, Pretender p) {
+        return toRemove.add(p);
     }
 }

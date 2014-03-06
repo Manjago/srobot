@@ -26,7 +26,7 @@ public class LamePoint {
     }
 
     public LamePoint nextVer(){
-        return new LamePoint(x, y + 1);
+        return new LamePoint(0, y + 1);
     }
 
     @Override
