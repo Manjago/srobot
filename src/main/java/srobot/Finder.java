@@ -11,8 +11,6 @@ import java.util.List;
 public class Finder {
     public static void main(String[] args) throws IOException {
 
-        int debugLimit = 99999999;
-
         BufferedImage big = Loader.load("test1_same_gray_1.png");
         if (big == null) {
             System.out.println("big not found");
@@ -72,7 +70,8 @@ public class Finder {
                             removeBad(toRemove, p);
                         } else {
                             // и образец тоже кончился - пытаемся пересочить на следующую горизонталь и в образце
-                            LamePoint nextInTest = p.getInTest().nextVer();
+                            final LamePoint lamePoint = p.getInTest().nextVer();
+                            LamePoint nextInTest = new LamePoint(p.getBorn().getX(), lamePoint.getY());
                             boolean hasNextTestVer = nextInTest.getY() <= (test.getHeight() - 1);
                             if (hasNextTestVer){
                                 int testRgb = test.getRGB(nextInTest.getX(), nextInTest.getY());
@@ -96,14 +95,16 @@ public class Finder {
 
                 // добавляем новых претендеров
 
-                if (--debugLimit >= 0 && !relax){
+                if (!relax){
                     int testRgb = test.getRGB(0, 0);
                     if (testRgb == transp || testRgb == rgb) {
                         // годится
                         LamePoint inTest = new LamePoint(0, 0);
                         LamePoint inBig = new LamePoint(i, j);
                         Pretender p = new Pretender(inTest, inBig);
-                        pretenders.add(p);
+                        if (p.getBorn().equals(new LamePoint(1, 0))){
+                            pretenders.add(p);
+                        }
                     }
                 }
 
