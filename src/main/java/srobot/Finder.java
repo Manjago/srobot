@@ -11,7 +11,7 @@ import java.util.List;
 public class Finder {
     public static void main(String[] args) throws IOException {
 
-        int debugLimit = 1;
+        int debugLimit = 99999999;
 
         BufferedImage big = Loader.load("1.png");
         if (big == null) {
@@ -31,6 +31,9 @@ public class Finder {
         List<Pretender> toRemove = new ArrayList<>();
 
         for (int j = 0; j < big.getHeight(); ++j) {
+
+            // нет смысла париться - уже по размеру не пролезаем
+            boolean relax = j + test.getHeight() > big.getHeight();
 
             for (int i = 0; i < big.getWidth(); ++i) {
                 int rgb = big.getRGB(i, j);
@@ -92,7 +95,7 @@ public class Finder {
 
                 // добавляем новых претендеров
 
-                if (--debugLimit >= 0){
+                if (--debugLimit >= 0 && !relax){
                     int testRgb = test.getRGB(0, 0);
                     if (testRgb == transp || testRgb == rgb) {
                         // годится
@@ -111,6 +114,7 @@ public class Finder {
                 toRemove.clear();
             }
         }
+
 
         System.out.printf("found %d pretenders", pretenders.size());
         System.out.print(pretenders);
