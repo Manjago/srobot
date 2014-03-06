@@ -13,7 +13,7 @@ import java.net.URL;
 public class Loader {
 
     public static BufferedImage load(String name) throws IOException {
-        URL url = Loader.class.getResource("1.png");
+        URL url = Loader.class.getResource(name);
 
         if (url == null){
             return null;

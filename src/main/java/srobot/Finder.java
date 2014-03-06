@@ -12,6 +12,8 @@ import java.util.List;
 public class Finder {
     public static void main(String[] args) throws IOException {
 
+        int debugLimit = 1;
+
         BufferedImage big = Loader.load("test1_2_small.png");
         if (big == null) {
             System.out.println("big not found");
@@ -51,6 +53,7 @@ public class Finder {
                             } else {
                                 // он хороший, продолжаем с ним работать, изменив содержимое
                                 p.setInTest(nextInTest);
+                                p.inMatches();
                             }
                         } else {
                             // раз образец кончился (но мы еще на той же горизонтали в большом - то это не наш вариант
@@ -76,6 +79,7 @@ public class Finder {
                                 } else {
                                     // он хороший, продолжаем с ним работать, изменив содержимое
                                     p.setInTest(nextInTest);
+                                    p.inMatches();
                                 }
                             } else {
                                 toRemove.add(p);
@@ -89,14 +93,18 @@ public class Finder {
 
 
                 // добавляем новых претендеров
-                int testRgb = test.getRGB(0, 0);
-                if (testRgb == transp || testRgb == rgb) {
-                    // годится
-                    LamePoint inTest = new LamePoint(0, 0);
-                    LamePoint inBig = new LamePoint(i, j);
-                    Pretender p = new Pretender(inTest, inBig);
-                    pretenders.add(p);
+
+                if (--debugLimit >= 0){
+                    int testRgb = test.getRGB(0, 0);
+                    if (testRgb == transp || testRgb == rgb) {
+                        // годится
+                        LamePoint inTest = new LamePoint(0, 0);
+                        LamePoint inBig = new LamePoint(i, j);
+                        Pretender p = new Pretender(inTest, inBig);
+                        pretenders.add(p);
+                    }
                 }
+
 
                 // удаляем неудачников
                 for (Pretender p : toRemove) {
