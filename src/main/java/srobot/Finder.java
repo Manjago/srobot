@@ -39,7 +39,7 @@ public class Finder {
                 for (Pretender p : pretenders) {
 
                     // мы все на той же горизонтали?
-                    boolean isSameHor = j == p.getInBig().getY();
+                    boolean isSameHor = j == p.getInTest().getY();
                     if (isSameHor) {
                         // в образце есть следующая точка?
                         LamePoint nextInTest = p.getInTest().nextHor();
@@ -119,7 +119,6 @@ public class Finder {
 
     private static void keepGood(int j, int i, Pretender p, LamePoint nextInTest) {
         p.setInTest(nextInTest);
-        p.setInBig(new LamePoint(i, j));
         p.incMatches();
     }
 
