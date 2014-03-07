@@ -19,6 +19,11 @@ public class Pretender {
     }
 
     private final LamePoint born;
+
+    public int getMatches() {
+        return matches;
+    }
+
     private int matches;
 
     public void incMatches() {
