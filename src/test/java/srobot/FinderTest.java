@@ -66,4 +66,14 @@ public class FinderTest {
         TestCase.assertNotNull(r);
         TestCase.assertEquals(3, r.size());
     }
+
+    @Test
+    public void testNormal() throws Exception {
+        BufferedImage big = Loader.load("testNormal.png");
+        BufferedImage test = Loader.load("normal.png");
+        List<LamePoint> r = Finder.find(big, test);
+        TestCase.assertNotNull(r);
+        TestCase.assertEquals(1, r.size());
+    }
+
 }
