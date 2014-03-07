@@ -76,4 +76,20 @@ public class FinderTest {
         TestCase.assertEquals(1, r.size());
     }
 
+    @Test
+    public void testCombo() throws Exception {
+        BufferedImage big = Loader.load("testCorners.png");
+        TestCase.assertEquals(1, Finder.find(big, Loader.load("NE.png")).size());
+        TestCase.assertEquals(1, Finder.find(big, Loader.load("NW.png")).size());
+        TestCase.assertEquals(1, Finder.find(big, Loader.load("SE.png")).size());
+        TestCase.assertEquals(1, Finder.find(big, Loader.load("SW.png")).size());
+        TestCase.assertEquals(25, Finder.find(big, Loader.load("1.png")).size());
+        TestCase.assertEquals(12, Finder.find(big, Loader.load("2.png")).size());
+        TestCase.assertEquals(1, Finder.find(big, Loader.load("3.png"), new LamePoint(0, 2)).size());
+        TestCase.assertEquals(1, Finder.find(big, Loader.load("4.png")).size());
+        TestCase.assertEquals(0, Finder.find(big, Loader.load("5.png")).size());
+        TestCase.assertEquals(1, Finder.find(big, Loader.load("normal.png")).size());
+    }
+
+
 }
