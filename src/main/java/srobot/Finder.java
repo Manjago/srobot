@@ -36,6 +36,8 @@ public final class Finder {
             // нет смысла париться - уже по размеру не пролезаем
             boolean relax = j + pattern.getHeight() > searchBase.getHeight();
 
+            System.out.printf("row %d pretenders %d\n", j, pretenders.size());
+
             for (int i = 0; i < searchBase.getWidth(); ++i) {
                 int rgb = searchBase.getRGB(i, j);
 
