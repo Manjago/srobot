@@ -70,8 +70,17 @@ public class Finder {
                             removeBad(toRemove, p);
                         } else {
                             // и образец тоже кончился - пытаемся пересочить на следующую горизонталь и в образце
-                            final LamePoint lamePoint = p.getInTest().nextVer();
-                            LamePoint nextInTest = new LamePoint(p.getBorn().getX(), lamePoint.getY());
+
+                            // однако же, если по x-координате образец родился позже, чем мы находимся теперь
+                            // то смысла нет тут  находится
+
+                            if (p.getBorn().getX() > i){
+                                // сейчас проверять нет смысла
+                                continue;
+                            }
+
+
+                            LamePoint nextInTest = p.getInTest().nextVer();
                             boolean hasNextTestVer = nextInTest.getY() <= (test.getHeight() - 1);
                             if (hasNextTestVer){
                                 int testRgb = test.getRGB(nextInTest.getX(), nextInTest.getY());
