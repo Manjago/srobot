@@ -18,12 +18,16 @@ public final class Finder {
         }
     }
 
-    public static List<LamePoint> find(BufferedImage searchBase, BufferedImage pattern) {
+    public static List<LamePoint> find(BufferedImage searchBase, BufferedImage pattern){
+        return find(searchBase, pattern, LamePoint.ZERO);
+    }
+
+    public static List<LamePoint> find(BufferedImage searchBase, BufferedImage pattern, LamePoint transpar) {
 
         check("searchBase", searchBase);
         check("pattern", pattern);
 
-        int transp = pattern.getRGB(0, 0);
+        int transp = pattern.getRGB(transpar.getX(), transpar.getY());
         List<Pretender> pretenders = new ArrayList<>();
         List<Pretender> toRemove = new ArrayList<>();
 
@@ -121,9 +125,8 @@ public final class Finder {
         int testRgb = pattern.getRGB(0, 0);
         if (isGood(transp, rgb, testRgb)) {
             // годится
-            LamePoint inTest = new LamePoint(0, 0);
             LamePoint inBig = new LamePoint(i, j);
-            Pretender p = new Pretender(inTest, inBig);
+            Pretender p = new Pretender(LamePoint.ZERO, inBig);
             pretenders.add(p);
         }
     }

@@ -6,6 +6,7 @@ package srobot;
 public class LamePoint implements Comparable<LamePoint> {
     private final int x;
     private final int y;
+    public static final LamePoint ZERO = new LamePoint(0, 0);
 
     public int getX() {
         return x;
