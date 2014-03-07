@@ -100,9 +100,7 @@ public class Finder {
                         LamePoint inTest = new LamePoint(0, 0);
                         LamePoint inBig = new LamePoint(i, j);
                         Pretender p = new Pretender(inTest, inBig);
-                        if (p.getBorn().equals(new LamePoint(1, 0))){
-                            pretenders.add(p);
-                        }
+                        pretenders.add(p);
                     }
                 }
 
@@ -116,8 +114,8 @@ public class Finder {
         }
 
 
-        System.out.printf("found %d pretenders", pretenders.size());
-        System.out.print(pretenders);
+        System.out.printf("found %d pretenders\n", pretenders.size());
+        System.out.println(pretenders);
 
         List<LamePoint> result = new ArrayList<>();
         int matches = pattern.getHeight() * pattern.getWidth();
