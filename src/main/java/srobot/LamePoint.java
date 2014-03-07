@@ -3,7 +3,7 @@ package srobot;
 /**
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
-public class LamePoint {
+public class LamePoint implements Comparable<LamePoint> {
     private final int x;
     private final int y;
 
@@ -70,5 +70,19 @@ public class LamePoint {
                 "x=" + x +
                 ", y=" + y +
                 '}';
+    }
+
+    @Override
+    public int compareTo(LamePoint o) {
+        if (o == null) {
+            return 1;
+        }
+        int preCompare = Integer.valueOf(getX()).compareTo(o.getX());
+        if (preCompare != 0) {
+            return preCompare;
+        } else {
+            return Integer.valueOf(getY()).compareTo(o.getY());
+        }
+
     }
 }

@@ -113,10 +113,6 @@ public class Finder {
             }
         }
 
-
-        System.out.printf("found %d pretenders\n", pretenders.size());
-        System.out.println(pretenders);
-
         List<LamePoint> result = new ArrayList<>();
         int matches = pattern.getHeight() * pattern.getWidth();
         for(Pretender p : pretenders){
