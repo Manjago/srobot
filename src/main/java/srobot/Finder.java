@@ -1,16 +1,19 @@
 package srobot;
 
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
-public class Finder {
-    private static void check(String msg, BufferedImage img){
-        if (img == null || img.getHeight() < 1 || img.getWidth() < 1){
+public final class Finder {
+
+    private Finder() {
+    }
+
+    private static void check(String msg, BufferedImage img) {
+        if (img == null || img.getHeight() < 1 || img.getWidth() < 1) {
             throw new IllegalArgumentException(msg);
         }
     }
@@ -20,7 +23,7 @@ public class Finder {
         check("searchBase", searchBase);
         check("pattern", pattern);
 
-        int transp = pattern.getRGB(0,0);
+        int transp = pattern.getRGB(0, 0);
         List<Pretender> pretenders = new ArrayList<>();
         List<Pretender> toRemove = new ArrayList<>();
 
@@ -34,89 +37,109 @@ public class Finder {
 
                 // проверяем старых претендеров
                 for (Pretender p : pretenders) {
-
-                    // мы все на той же горизонтали?
-                    boolean isSameHor = j == p.getInBig().getY();
-                    if (isSameHor) {
-                        // в образце есть следующая точка?
-                        LamePoint nextInTest = p.getInTest().nextHor();
-                        boolean hasNextTestHor = nextInTest.getX() <= (pattern.getWidth() - 1);
-                        if (hasNextTestHor) {
-                            // раз есть - то можно проверять стандартным образом
-                            int testRgb = pattern.getRGB(nextInTest.getX(), nextInTest.getY());
-                            boolean isGood = testRgb == transp || testRgb == rgb;
-                            if (!isGood) {
-                                removeBad(toRemove, p);
-                            } else {
-                                // он хороший, продолжаем с ним работать, изменив содержимое
-                                keepGood(p, nextInTest);
-                            }
-                        }
-
-                    } else {
-                        // мы уже на новой горизонтали, ничего себе!
-                        // если образец еще не кончился - мы этого ему не простим
-                        LamePoint nextInTestHor = p.getInTest().nextHor();
-                        boolean hasNextTestHor = nextInTestHor.getX() <= (pattern.getWidth()- 1);
-                        if (hasNextTestHor) {
-                            removeBad(toRemove, p);
-                        } else {
-                            // и образец тоже кончился - пытаемся пересочить на следующую горизонталь и в образце
-
-                            // однако же, если по x-координате образец родился позже, чем мы находимся теперь
-                            // то смысла нет тут  находится
-
-                            if (p.getBorn().getX() > i){
-                                // сейчас проверять нет смысла
-                                continue;
-                            }
-
-
-                            LamePoint nextInTest = p.getInTest().nextVer();
-                            boolean hasNextTestVer = nextInTest.getY() <= (pattern.getHeight() - 1);
-                            if (hasNextTestVer){
-                                int testRgb = pattern.getRGB(nextInTest.getX(), nextInTest.getY());
-                                boolean isGood = testRgb == transp || testRgb == rgb;
-                                if (!isGood) {
-                                    removeBad(toRemove, p);
-                                } else {
-                                    // он хороший, продолжаем с ним работать, изменив содержимое
-                                    keepGood(p, nextInTest);
-                                }
-                            }
-
-                        }
-                    }
-
+                    checkOldPretenders(pattern, transp, toRemove, j, i, rgb, p);
                 }
 
-
-                // добавляем новых претендеров
-
-                if (!relax){
-                    int testRgb = pattern.getRGB(0, 0);
-                    if (testRgb == transp || testRgb == rgb) {
-                        // годится
-                        LamePoint inTest = new LamePoint(0, 0);
-                        LamePoint inBig = new LamePoint(i, j);
-                        Pretender p = new Pretender(inTest, inBig);
-                        pretenders.add(p);
-                    }
+                if (!relax) {
+                    addNewPretender(pattern, transp, pretenders, j, i, rgb);
                 }
 
-
-                // удаляем неудачников
-                for (Pretender p : toRemove) {
-                    pretenders.remove(p);
-                }
-                toRemove.clear();
+                removeLoosers(pretenders, toRemove);
             }
         }
 
+        return makeResult(pattern, pretenders);
+    }
+
+    private static void checkOldPretenders(BufferedImage pattern, int transp, List<Pretender> toRemove, int j, int i, int rgb, Pretender p) {
+        // мы все на той же горизонтали?
+        boolean isSameHor = j == p.getInBig().getY();
+        if (isSameHor) {
+            checkSameHor(pattern, transp, toRemove, rgb, p);
+        } else {
+            checkAnotherHor(pattern, transp, toRemove, i, rgb, p);
+        }
+    }
+
+    private static void checkAnotherHor(BufferedImage pattern, int transp, List<Pretender> toRemove, int i, int rgb, Pretender p) {
+        // мы уже на новой горизонтали, ничего себе!
+        // если образец еще не кончился - мы этого ему не простим
+        LamePoint nextInTestHor = p.getInTest().nextHor();
+        boolean hasNextTestHor = nextInTestHor.getX() <= (pattern.getWidth() - 1);
+        if (hasNextTestHor) {
+            removeBad(toRemove, p);
+        } else {
+            // и образец тоже кончился - пытаемся пересочить на следующую горизонталь и в образце
+
+            // однако же, если по x-координате образец родился позже, чем мы находимся теперь
+            // то смысла нет тут  находится
+
+            if (p.getBorn().getX() > i) {
+                // сейчас проверять нет смысла
+                return;
+            }
+
+
+            LamePoint nextInTest = p.getInTest().nextVer();
+            boolean hasNextTestVer = nextInTest.getY() <= (pattern.getHeight() - 1);
+            if (hasNextTestVer) {
+                int testRgb = pattern.getRGB(nextInTest.getX(), nextInTest.getY());
+                boolean isGood = isGood(transp, rgb, testRgb);
+                if (!isGood) {
+                    removeBad(toRemove, p);
+                } else {
+                    // он хороший, продолжаем с ним работать, изменив содержимое
+                    keepGood(p, nextInTest);
+                }
+            }
+
+        }
+    }
+
+    private static void checkSameHor(BufferedImage pattern, int transp, List<Pretender> toRemove, int rgb, Pretender p) {
+        // в образце есть следующая точка?
+        LamePoint nextInTest = p.getInTest().nextHor();
+        boolean hasNextTestHor = nextInTest.getX() <= (pattern.getWidth() - 1);
+        if (hasNextTestHor) {
+            // раз есть - то можно проверять стандартным образом
+            int testRgb = pattern.getRGB(nextInTest.getX(), nextInTest.getY());
+            boolean isGood = isGood(transp, rgb, testRgb);
+            if (!isGood) {
+                removeBad(toRemove, p);
+            } else {
+                // он хороший, продолжаем с ним работать, изменив содержимое
+                keepGood(p, nextInTest);
+            }
+        }
+    }
+
+    private static boolean isGood(int transp, int rgb, int testRgb) {
+        return testRgb == transp || testRgb == rgb;
+    }
+
+    private static void addNewPretender(BufferedImage pattern, int transp, List<Pretender> pretenders, int j, int i, int rgb) {
+        int testRgb = pattern.getRGB(0, 0);
+        if (isGood(transp, rgb, testRgb)) {
+            // годится
+            LamePoint inTest = new LamePoint(0, 0);
+            LamePoint inBig = new LamePoint(i, j);
+            Pretender p = new Pretender(inTest, inBig);
+            pretenders.add(p);
+        }
+    }
+
+    private static void removeLoosers(List<Pretender> pretenders, List<Pretender> toRemove) {
+        for (Pretender p : toRemove) {
+            pretenders.remove(p);
+        }
+        toRemove.clear();
+    }
+
+    private static List<LamePoint> makeResult(BufferedImage pattern, List<Pretender> pretenders) {
         List<LamePoint> result = new ArrayList<>();
         int matches = pattern.getHeight() * pattern.getWidth();
-        for(Pretender p : pretenders){
-            if (p.getMatches() == matches){
+        for (Pretender p : pretenders) {
+            if (p.getMatches() == matches) {
                 result.add(p.getBorn());
             }
         }
