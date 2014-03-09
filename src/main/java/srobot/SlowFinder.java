@@ -7,9 +7,9 @@ import java.util.List;
 /**
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
-public final class SlowFinder {
+public class SlowFinder implements Finder{
 
-    private SlowFinder() {
+    public SlowFinder() {
     }
 
     private static void check(String msg, BufferedImage img) {
@@ -18,7 +18,7 @@ public final class SlowFinder {
         }
     }
 
-    public static List<SimplePoint> find(BufferedImage searchBase, SearchPattern pattern) {
+    public List<SimplePoint> find(BufferedImage searchBase, SearchPattern pattern) {
 
         check("searchBase", searchBase);
         check("pattern", pattern.getPattern());

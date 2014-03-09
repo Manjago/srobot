@@ -18,7 +18,7 @@ public class Board {
         stopWatch.stop();
 
         stopWatch.start("normal");
-        List<SimplePoint> normalSearch = SlowFinder.find(bigBoard, new SearchPattern(normal));
+        List<SimplePoint> normalSearch = new SlowFinder().find(bigBoard, new SearchPattern(normal));
         stopWatch.stop();
         System.out.println(normalSearch);
 

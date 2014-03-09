@@ -14,7 +14,7 @@ public class SlowFinderTest {
     public void testShiftedRight1() throws Exception {
         BufferedImage big = Loader.load("shifted_right_1.png");
         BufferedImage test = Loader.load("1.png");
-        List<SimplePoint> r = SlowFinder.find(big, new SearchPattern(test));
+        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
         TestCase.assertEquals(new SimplePoint(1, 0), r.get(0));
@@ -24,7 +24,7 @@ public class SlowFinderTest {
     public void testShiftedDown1() throws Exception {
         BufferedImage big = Loader.load("shifted_down_1.png");
         BufferedImage test = Loader.load("1.png");
-        List<SimplePoint> r = SlowFinder.find(big, new SearchPattern(test));
+        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
         TestCase.assertEquals(new SimplePoint(0, 1), r.get(0));
@@ -34,7 +34,7 @@ public class SlowFinderTest {
     public void test1_11() throws Exception {
         BufferedImage big = Loader.load("1_11.png");
         BufferedImage test = Loader.load("1.png");
-        List<SimplePoint> r = SlowFinder.find(big, new SearchPattern(test));
+        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(11, r.size());
     }
@@ -43,7 +43,7 @@ public class SlowFinderTest {
     public void test1_2_small() throws Exception {
         BufferedImage big = Loader.load("1_2_small.png");
         BufferedImage test = Loader.load("1.png");
-        List<SimplePoint> r = SlowFinder.find(big, new SearchPattern(test));
+        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(2, r.size());
     }
@@ -52,7 +52,7 @@ public class SlowFinderTest {
     public void test1() throws Exception {
         BufferedImage big = Loader.load("test1.png");
         BufferedImage test = Loader.load("1.png");
-        List<SimplePoint> r = SlowFinder.find(big, new SearchPattern(test));
+        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
     }
@@ -61,7 +61,7 @@ public class SlowFinderTest {
     public void test3() throws Exception {
         BufferedImage big = Loader.load("test3_3.png");
         BufferedImage test = Loader.load("3.png");
-        List<SimplePoint> r = SlowFinder.find(big, new SearchPattern(test, new SimplePoint(0, 2)));
+        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test, new SimplePoint(0, 2)));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(3, r.size());
     }
@@ -70,7 +70,7 @@ public class SlowFinderTest {
     public void testNormal() throws Exception {
         BufferedImage big = Loader.load("testNormal.png");
         BufferedImage test = Loader.load("normal.png");
-        List<SimplePoint> r = SlowFinder.find(big, new SearchPattern(test));
+        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
     }
@@ -78,16 +78,16 @@ public class SlowFinderTest {
     @Test
     public void testCombo() throws Exception {
         BufferedImage big = Loader.load("testCorners.png");
-        TestCase.assertEquals(1, SlowFinder.find(big, new SearchPattern(Loader.load("NE.png"))).size());
-        TestCase.assertEquals(1, SlowFinder.find(big, new SearchPattern(Loader.load("NW.png"))).size());
-        TestCase.assertEquals(1, SlowFinder.find(big, new SearchPattern(Loader.load("SE.png"))).size());
-        TestCase.assertEquals(1, SlowFinder.find(big, new SearchPattern(Loader.load("SW.png"))).size());
-        TestCase.assertEquals(25, SlowFinder.find(big, new SearchPattern(Loader.load("1.png"))).size());
-        TestCase.assertEquals(12, SlowFinder.find(big, new SearchPattern(Loader.load("2.png"))).size());
-        TestCase.assertEquals(1, SlowFinder.find(big, new SearchPattern(Loader.load("3.png"), new SimplePoint(0, 2))).size());
-        TestCase.assertEquals(1, SlowFinder.find(big, new SearchPattern(Loader.load("4.png"))).size());
-        TestCase.assertEquals(0, SlowFinder.find(big, new SearchPattern(Loader.load("5.png"))).size());
-        TestCase.assertEquals(1, SlowFinder.find(big, new SearchPattern(Loader.load("normal.png"))).size());
+        TestCase.assertEquals(1, new SlowFinder().find(big, new SearchPattern(Loader.load("NE.png"))).size());
+        TestCase.assertEquals(1, new SlowFinder().find(big, new SearchPattern(Loader.load("NW.png"))).size());
+        TestCase.assertEquals(1, new SlowFinder().find(big, new SearchPattern(Loader.load("SE.png"))).size());
+        TestCase.assertEquals(1, new SlowFinder().find(big, new SearchPattern(Loader.load("SW.png"))).size());
+        TestCase.assertEquals(25, new SlowFinder().find(big, new SearchPattern(Loader.load("1.png"))).size());
+        TestCase.assertEquals(12, new SlowFinder().find(big, new SearchPattern(Loader.load("2.png"))).size());
+        TestCase.assertEquals(1, new SlowFinder().find(big, new SearchPattern(Loader.load("3.png"), new SimplePoint(0, 2))).size());
+        TestCase.assertEquals(1, new SlowFinder().find(big, new SearchPattern(Loader.load("4.png"))).size());
+        TestCase.assertEquals(0, new SlowFinder().find(big, new SearchPattern(Loader.load("5.png"))).size());
+        TestCase.assertEquals(1, new SlowFinder().find(big, new SearchPattern(Loader.load("normal.png"))).size());
     }
 
 
