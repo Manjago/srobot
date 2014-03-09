@@ -15,7 +15,7 @@ public class BruteFinderTest {
     public void testSelf() throws Exception {
         BufferedImage big = Loader.load("1.png");
         BufferedImage test = Loader.load("1.png");
-        List<SimplePoint> r = new SlowFinder().find(big, new SearchPattern(test));
+        List<SimplePoint> r = new BruteFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
         TestCase.assertEquals(new SimplePoint(0, 0), r.get(0));

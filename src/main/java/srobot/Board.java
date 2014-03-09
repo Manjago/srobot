@@ -17,15 +17,15 @@ public class Board {
         BufferedImage nw = Loader.load("NW.png");
         stopWatch.stop();
 
+        stopWatch.start("NW");
+        List<SimplePoint> nwSearch = new BruteFinder().find(bigBoard, new SearchPattern(nw));
+        stopWatch.stop();
+        System.out.println(nwSearch);
+
         stopWatch.start("normal");
-        List<SimplePoint> normalSearch = new SlowFinder().find(bigBoard, new SearchPattern(normal));
+        List<SimplePoint> normalSearch = new BruteFinder().find(bigBoard, new SearchPattern(normal));
         stopWatch.stop();
         System.out.println(normalSearch);
-
-//        stopWatch.start("corner");
-//        List<SimplePoint> cornerSearch = SlowFinder.find(bigBoard, nw);
-//        stopWatch.stop();
-//        System.out.println(cornerSearch);
 
         System.out.println(stopWatch.prettyPrint());
 
