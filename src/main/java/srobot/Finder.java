@@ -18,16 +18,11 @@ public final class Finder {
         }
     }
 
-    public static List<LamePoint> find(BufferedImage searchBase, BufferedImage pattern){
-        return find(searchBase, pattern, LamePoint.ZERO);
-    }
-
-    public static List<LamePoint> find(BufferedImage searchBase, BufferedImage pattern, LamePoint transpar) {
+    public static List<LamePoint> find(BufferedImage searchBase, SearchPattern pattern) {
 
         check("searchBase", searchBase);
-        check("pattern", pattern);
+        check("pattern", pattern.getPattern());
 
-        int transp = pattern.getRGB(transpar.getX(), transpar.getY());
         List<Pretender> pretenders = new ArrayList<>();
         List<Pretender> toRemove = new ArrayList<>();
 
@@ -36,18 +31,18 @@ public final class Finder {
             // нет смысла париться - уже по размеру не пролезаем
             boolean relax = j + pattern.getHeight() > searchBase.getHeight();
 
-            System.out.printf("row %d pretenders %d %s\n", j, pretenders.size(), pretenders);
+            //System.out.printf("row %d pretenders %d %s\n", j, pretenders.size(), pretenders);
 
             for (int i = 0; i < searchBase.getWidth(); ++i) {
                 int rgb = searchBase.getRGB(i, j);
 
                 // проверяем старых претендеров
                 for (Pretender p : pretenders) {
-                    checkOldPretenders(pattern, transp, toRemove, j, i, rgb, p);
+                    checkOldPretenders(pattern, toRemove, j, i, rgb, p);
                 }
 
                 if (!relax) {
-                    addNewPretender(pattern, transp, pretenders, j, i, rgb);
+                    addNewPretender(pattern, pretenders, j, i, rgb);
                 }
 
                 removeLoosers(pretenders, toRemove);
@@ -57,17 +52,17 @@ public final class Finder {
         return makeResult(pattern, pretenders);
     }
 
-    private static void checkOldPretenders(BufferedImage pattern, int transp, List<Pretender> toRemove, int j, int i, int rgb, Pretender p) {
+    private static void checkOldPretenders(SearchPattern pattern, List<Pretender> toRemove, int j, int i, int rgb, Pretender p) {
         // мы все на той же горизонтали?
         boolean isSameHor = j == p.getInBig().getY();
         if (isSameHor) {
-            checkSameHor(pattern, transp, toRemove, rgb, p);
+            checkSameHor(pattern, toRemove, rgb, p);
         } else {
-            checkAnotherHor(pattern, transp, toRemove, i, rgb, p);
+            checkAnotherHor(pattern, toRemove, i, rgb, p);
         }
     }
 
-    private static void checkAnotherHor(BufferedImage pattern, int transp, List<Pretender> toRemove, int i, int rgb, Pretender p) {
+    private static void checkAnotherHor(SearchPattern pattern, List<Pretender> toRemove, int i, int rgb, Pretender p) {
         // мы уже на новой горизонтали, ничего себе!
         // если образец еще не кончился - мы этого ему не простим
         LamePoint nextInTestHor = p.getInTest().nextHor();
@@ -89,8 +84,7 @@ public final class Finder {
             LamePoint nextInTest = p.getInTest().nextVer();
             boolean hasNextTestVer = nextInTest.getY() <= (pattern.getHeight() - 1);
             if (hasNextTestVer) {
-                int testRgb = pattern.getRGB(nextInTest.getX(), nextInTest.getY());
-                boolean isGood = isGood(transp, rgb, testRgb);
+                boolean isGood = pattern.isGood(rgb, nextInTest);
                 if (!isGood) {
                     removeBad(toRemove, p);
                 } else {
@@ -102,14 +96,13 @@ public final class Finder {
         }
     }
 
-    private static void checkSameHor(BufferedImage pattern, int transp, List<Pretender> toRemove, int rgb, Pretender p) {
+    private static void checkSameHor(SearchPattern pattern, List<Pretender> toRemove, int rgb, Pretender p) {
         // в образце есть следующая точка?
         LamePoint nextInTest = p.getInTest().nextHor();
         boolean hasNextTestHor = nextInTest.getX() <= (pattern.getWidth() - 1);
         if (hasNextTestHor) {
             // раз есть - то можно проверять стандартным образом
-            int testRgb = pattern.getRGB(nextInTest.getX(), nextInTest.getY());
-            boolean isGood = isGood(transp, rgb, testRgb);
+            boolean isGood = pattern.isGood(rgb, nextInTest);
             if (!isGood) {
                 removeBad(toRemove, p);
             } else {
@@ -119,13 +112,8 @@ public final class Finder {
         }
     }
 
-    private static boolean isGood(int transp, int rgb, int testRgb) {
-        return testRgb == transp || testRgb == rgb;
-    }
-
-    private static void addNewPretender(BufferedImage pattern, int transp, List<Pretender> pretenders, int j, int i, int rgb) {
-        int testRgb = pattern.getRGB(0, 0);
-        if (isGood(transp, rgb, testRgb)) {
+    private static void addNewPretender(SearchPattern pattern, List<Pretender> pretenders, int j, int i, int rgb) {
+        if (pattern.isGood(rgb, LamePoint.ZERO)) {
             // годится
             LamePoint inBig = new LamePoint(i, j);
             Pretender p = new Pretender(LamePoint.ZERO, inBig);
@@ -140,7 +128,7 @@ public final class Finder {
         toRemove.clear();
     }
 
-    private static List<LamePoint> makeResult(BufferedImage pattern, List<Pretender> pretenders) {
+    private static List<LamePoint> makeResult(SearchPattern pattern, List<Pretender> pretenders) {
         List<LamePoint> result = new ArrayList<>();
         int matches = pattern.getHeight() * pattern.getWidth();
         for (Pretender p : pretenders) {

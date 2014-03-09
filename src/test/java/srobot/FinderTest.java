@@ -15,7 +15,7 @@ public class FinderTest {
     public void testShiftedRight1() throws Exception {
         BufferedImage big = Loader.load("shifted_right_1.png");
         BufferedImage test = Loader.load("1.png");
-        List<LamePoint> r = Finder.find(big, test);
+        List<LamePoint> r = Finder.find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
         TestCase.assertEquals(new LamePoint(1, 0), r.get(0));
@@ -25,7 +25,7 @@ public class FinderTest {
     public void testShiftedDown1() throws Exception {
         BufferedImage big = Loader.load("shifted_down_1.png");
         BufferedImage test = Loader.load("1.png");
-        List<LamePoint> r = Finder.find(big, test);
+        List<LamePoint> r = Finder.find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
         TestCase.assertEquals(new LamePoint(0, 1), r.get(0));
@@ -35,7 +35,7 @@ public class FinderTest {
     public void test1_11() throws Exception {
         BufferedImage big = Loader.load("1_11.png");
         BufferedImage test = Loader.load("1.png");
-        List<LamePoint> r = Finder.find(big, test);
+        List<LamePoint> r = Finder.find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(11, r.size());
     }
@@ -44,7 +44,7 @@ public class FinderTest {
     public void test1_2_small() throws Exception {
         BufferedImage big = Loader.load("1_2_small.png");
         BufferedImage test = Loader.load("1.png");
-        List<LamePoint> r = Finder.find(big, test);
+        List<LamePoint> r = Finder.find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(2, r.size());
     }
@@ -53,7 +53,7 @@ public class FinderTest {
     public void test1() throws Exception {
         BufferedImage big = Loader.load("test1.png");
         BufferedImage test = Loader.load("1.png");
-        List<LamePoint> r = Finder.find(big, test);
+        List<LamePoint> r = Finder.find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
     }
@@ -62,7 +62,7 @@ public class FinderTest {
     public void test3() throws Exception {
         BufferedImage big = Loader.load("test3_3.png");
         BufferedImage test = Loader.load("3.png");
-        List<LamePoint> r = Finder.find(big, test, new LamePoint(0, 2));
+        List<LamePoint> r = Finder.find(big, new SearchPattern(test, new LamePoint(0, 2)));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(3, r.size());
     }
@@ -71,7 +71,7 @@ public class FinderTest {
     public void testNormal() throws Exception {
         BufferedImage big = Loader.load("testNormal.png");
         BufferedImage test = Loader.load("normal.png");
-        List<LamePoint> r = Finder.find(big, test);
+        List<LamePoint> r = Finder.find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
     }
@@ -79,16 +79,16 @@ public class FinderTest {
     @Test
     public void testCombo() throws Exception {
         BufferedImage big = Loader.load("testCorners.png");
-        TestCase.assertEquals(1, Finder.find(big, Loader.load("NE.png")).size());
-        TestCase.assertEquals(1, Finder.find(big, Loader.load("NW.png")).size());
-        TestCase.assertEquals(1, Finder.find(big, Loader.load("SE.png")).size());
-        TestCase.assertEquals(1, Finder.find(big, Loader.load("SW.png")).size());
-        TestCase.assertEquals(25, Finder.find(big, Loader.load("1.png")).size());
-        TestCase.assertEquals(12, Finder.find(big, Loader.load("2.png")).size());
-        TestCase.assertEquals(1, Finder.find(big, Loader.load("3.png"), new LamePoint(0, 2)).size());
-        TestCase.assertEquals(1, Finder.find(big, Loader.load("4.png")).size());
-        TestCase.assertEquals(0, Finder.find(big, Loader.load("5.png")).size());
-        TestCase.assertEquals(1, Finder.find(big, Loader.load("normal.png")).size());
+        TestCase.assertEquals(1, Finder.find(big, new SearchPattern(Loader.load("NE.png"))).size());
+        TestCase.assertEquals(1, Finder.find(big, new SearchPattern(Loader.load("NW.png"))).size());
+        TestCase.assertEquals(1, Finder.find(big, new SearchPattern(Loader.load("SE.png"))).size());
+        TestCase.assertEquals(1, Finder.find(big, new SearchPattern(Loader.load("SW.png"))).size());
+        TestCase.assertEquals(25, Finder.find(big, new SearchPattern(Loader.load("1.png"))).size());
+        TestCase.assertEquals(12, Finder.find(big, new SearchPattern(Loader.load("2.png"))).size());
+        TestCase.assertEquals(1, Finder.find(big, new SearchPattern(Loader.load("3.png"), new LamePoint(0, 2))).size());
+        TestCase.assertEquals(1, Finder.find(big, new SearchPattern(Loader.load("4.png"))).size());
+        TestCase.assertEquals(0, Finder.find(big, new SearchPattern(Loader.load("5.png"))).size());
+        TestCase.assertEquals(1, Finder.find(big, new SearchPattern(Loader.load("normal.png"))).size());
     }
 
 

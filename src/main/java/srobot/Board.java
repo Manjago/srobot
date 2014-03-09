@@ -18,7 +18,7 @@ public class Board {
         stopWatch.stop();
 
         stopWatch.start("normal");
-        List<LamePoint> normalSearch = Finder.find(bigBoard, normal);
+        List<LamePoint> normalSearch = Finder.find(bigBoard, new SearchPattern(normal));
         stopWatch.stop();
         System.out.println(normalSearch);
 
