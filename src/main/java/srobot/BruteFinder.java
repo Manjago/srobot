@@ -33,6 +33,12 @@ public class BruteFinder implements Finder {
         return result;
     }
 
+    @Override
+    public SimplePoint findOne(BufferedImage searchBase, SearchPattern pattern) {
+        List<SimplePoint> res = find(searchBase, pattern, 1);
+        return res.size() == 1 ? res.get(0) : null;
+    }
+
     private static void test(BufferedImage searchBase, SearchPattern pattern, List<SimplePoint> result, int j, int i) {
         for(int jShift = 0; jShift < pattern.getHeight(); ++jShift){
             for (int iShift = 0; iShift < pattern.getWidth(); ++iShift){

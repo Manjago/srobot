@@ -69,6 +69,22 @@ public class BruteFinderTest {
     }
 
     @Test
+    public void test1_2_small_oneonly_yes() throws Exception {
+        BufferedImage big = Loader.load("1_2_small.png");
+        BufferedImage test = Loader.load("1.png");
+        SimplePoint r = new BruteFinder().findOne(big, new SearchPattern(test));
+        TestCase.assertNotNull(r);
+    }
+
+    @Test
+    public void test1_2_small_oneonly_no() throws Exception {
+        BufferedImage big = Loader.load("1_2_small.png");
+        BufferedImage test = Loader.load("3.png");
+        SimplePoint r = new BruteFinder().findOne(big, new SearchPattern(test));
+        TestCase.assertNull(r);
+    }
+
+    @Test
     public void test1() throws Exception {
         BufferedImage big = Loader.load("test1.png");
         BufferedImage test = Loader.load("1.png");
