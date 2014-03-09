@@ -60,6 +60,15 @@ public class BruteFinderTest {
     }
 
     @Test
+    public void test1_2_small_oneonly() throws Exception {
+        BufferedImage big = Loader.load("1_2_small.png");
+        BufferedImage test = Loader.load("1.png");
+        List<SimplePoint> r = new BruteFinder().find(big, new SearchPattern(test), 1);
+        TestCase.assertNotNull(r);
+        TestCase.assertEquals(1, r.size());
+    }
+
+    @Test
     public void test1() throws Exception {
         BufferedImage big = Loader.load("test1.png");
         BufferedImage test = Loader.load("1.png");
