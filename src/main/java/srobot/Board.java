@@ -18,12 +18,12 @@ public class Board {
         stopWatch.stop();
 
         stopWatch.start("NW");
-        List<SimplePoint> nwSearch = new BruteFinder().find(bigBoard, new SearchPattern(nw));
+        List<SimplePoint> nwSearch = new BruteFinder().find(bigBoard, new SearchPattern(nw), 1);
         stopWatch.stop();
         System.out.println(nwSearch);
 
         stopWatch.start("normal");
-        List<SimplePoint> normalSearch = new BruteFinder().find(bigBoard, new SearchPattern(normal));
+        List<SimplePoint> normalSearch = new BruteFinder().find(bigBoard, new SearchPattern(normal), 1);
         stopWatch.stop();
         System.out.println(normalSearch);
 
