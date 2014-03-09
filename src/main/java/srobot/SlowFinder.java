@@ -7,9 +7,9 @@ import java.util.List;
 /**
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
-public final class Finder {
+public final class SlowFinder {
 
-    private Finder() {
+    private SlowFinder() {
     }
 
     private static void check(String msg, BufferedImage img) {
@@ -18,7 +18,7 @@ public final class Finder {
         }
     }
 
-    public static List<LamePoint> find(BufferedImage searchBase, SearchPattern pattern) {
+    public static List<SimplePoint> find(BufferedImage searchBase, SearchPattern pattern) {
 
         check("searchBase", searchBase);
         check("pattern", pattern.getPattern());
@@ -65,7 +65,7 @@ public final class Finder {
     private static void checkAnotherHor(SearchPattern pattern, List<Pretender> toRemove, int i, int rgb, Pretender p) {
         // мы уже на новой горизонтали, ничего себе!
         // если образец еще не кончился - мы этого ему не простим
-        LamePoint nextInTestHor = p.getInTest().nextHor();
+        SimplePoint nextInTestHor = p.getInTest().nextHor();
         boolean hasNextTestHor = nextInTestHor.getX() <= (pattern.getWidth() - 1);
         if (hasNextTestHor) {
             removeBad(toRemove, p);
@@ -81,7 +81,7 @@ public final class Finder {
             }
 
 
-            LamePoint nextInTest = p.getInTest().nextVer();
+            SimplePoint nextInTest = p.getInTest().nextVer();
             boolean hasNextTestVer = nextInTest.getY() <= (pattern.getHeight() - 1);
             if (hasNextTestVer) {
                 boolean isGood = pattern.isGood(rgb, nextInTest);
@@ -98,7 +98,7 @@ public final class Finder {
 
     private static void checkSameHor(SearchPattern pattern, List<Pretender> toRemove, int rgb, Pretender p) {
         // в образце есть следующая точка?
-        LamePoint nextInTest = p.getInTest().nextHor();
+        SimplePoint nextInTest = p.getInTest().nextHor();
         boolean hasNextTestHor = nextInTest.getX() <= (pattern.getWidth() - 1);
         if (hasNextTestHor) {
             // раз есть - то можно проверять стандартным образом
@@ -113,10 +113,10 @@ public final class Finder {
     }
 
     private static void addNewPretender(SearchPattern pattern, List<Pretender> pretenders, int j, int i, int rgb) {
-        if (pattern.isGood(rgb, LamePoint.ZERO)) {
+        if (pattern.isGood(rgb, SimplePoint.ZERO)) {
             // годится
-            LamePoint inBig = new LamePoint(i, j);
-            Pretender p = new Pretender(LamePoint.ZERO, inBig);
+            SimplePoint inBig = new SimplePoint(i, j);
+            Pretender p = new Pretender(SimplePoint.ZERO, inBig);
             pretenders.add(p);
         }
     }
@@ -128,8 +128,8 @@ public final class Finder {
         toRemove.clear();
     }
 
-    private static List<LamePoint> makeResult(SearchPattern pattern, List<Pretender> pretenders) {
-        List<LamePoint> result = new ArrayList<>();
+    private static List<SimplePoint> makeResult(SearchPattern pattern, List<Pretender> pretenders) {
+        List<SimplePoint> result = new ArrayList<>();
         int matches = pattern.getHeight() * pattern.getWidth();
         for (Pretender p : pretenders) {
             if (p.getMatches() == matches) {
@@ -139,7 +139,7 @@ public final class Finder {
         return result;
     }
 
-    private static void keepGood(Pretender p, LamePoint nextInTest) {
+    private static void keepGood(Pretender p, SimplePoint nextInTest) {
         p.setInTest(nextInTest);
         p.incMatches();
     }

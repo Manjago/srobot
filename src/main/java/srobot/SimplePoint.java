@@ -3,10 +3,10 @@ package srobot;
 /**
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
-public class LamePoint implements Comparable<LamePoint> {
+public class SimplePoint implements Comparable<SimplePoint> {
     private final int x;
     private final int y;
-    public static final LamePoint ZERO = new LamePoint(0, 0);
+    public static final SimplePoint ZERO = new SimplePoint(0, 0);
 
     public int getX() {
         return x;
@@ -16,24 +16,24 @@ public class LamePoint implements Comparable<LamePoint> {
         return y;
     }
 
-    public LamePoint(int x, int y) {
+    public SimplePoint(int x, int y) {
         this.x = x;
         this.y = y;
     }
 
-    public LamePoint nextHor() {
-        return new LamePoint(x + 1, y);
+    public SimplePoint nextHor() {
+        return new SimplePoint(x + 1, y);
     }
 
-    public LamePoint nextVer() {
-        return new LamePoint(0, y + 1);
+    public SimplePoint nextVer() {
+        return new SimplePoint(0, y + 1);
     }
 
-    public LamePoint add(LamePoint p) {
+    public SimplePoint add(SimplePoint p) {
         if (p == null) {
             return this;
         }
-        return new LamePoint(x + p.getX(), y + p.getY());
+        return new SimplePoint(x + p.getX(), y + p.getY());
     }
 
     @Override
@@ -45,12 +45,12 @@ public class LamePoint implements Comparable<LamePoint> {
             return false;
         }
 
-        LamePoint lamePoint = (LamePoint) o;
+        SimplePoint simplePoint = (SimplePoint) o;
 
-        if (x != lamePoint.x) {
+        if (x != simplePoint.x) {
             return false;
         }
-        if (y != lamePoint.y) {
+        if (y != simplePoint.y) {
             return false;
         }
 
@@ -67,14 +67,14 @@ public class LamePoint implements Comparable<LamePoint> {
 
     @Override
     public String toString() {
-        return "LamePoint{" +
+        return "SimplePoint{" +
                 "x=" + x +
                 ", y=" + y +
                 '}';
     }
 
     @Override
-    public int compareTo(LamePoint o) {
+    public int compareTo(SimplePoint o) {
         if (o == null) {
             return 1;
         }

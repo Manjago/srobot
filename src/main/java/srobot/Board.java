@@ -18,12 +18,12 @@ public class Board {
         stopWatch.stop();
 
         stopWatch.start("normal");
-        List<LamePoint> normalSearch = Finder.find(bigBoard, new SearchPattern(normal));
+        List<SimplePoint> normalSearch = SlowFinder.find(bigBoard, new SearchPattern(normal));
         stopWatch.stop();
         System.out.println(normalSearch);
 
 //        stopWatch.start("corner");
-//        List<LamePoint> cornerSearch = Finder.find(bigBoard, nw);
+//        List<SimplePoint> cornerSearch = SlowFinder.find(bigBoard, nw);
 //        stopWatch.stop();
 //        System.out.println(cornerSearch);
 

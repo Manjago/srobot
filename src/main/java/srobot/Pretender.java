@@ -4,21 +4,21 @@ package srobot;
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
 public class Pretender {
-    public LamePoint getInTest() {
+    public SimplePoint getInTest() {
         return inTest;
     }
 
-    public LamePoint getInBig() {
+    public SimplePoint getInBig() {
         return born.add(inTest);
     }
 
-    private LamePoint inTest;
+    private SimplePoint inTest;
 
-    public LamePoint getBorn() {
+    public SimplePoint getBorn() {
         return born;
     }
 
-    private final LamePoint born;
+    private final SimplePoint born;
 
     public int getMatches() {
         return matches;
@@ -31,11 +31,11 @@ public class Pretender {
     }
 
 
-    public void setInTest(LamePoint inTest) {
+    public void setInTest(SimplePoint inTest) {
         this.inTest = inTest;
     }
 
-    public Pretender(LamePoint inTest, LamePoint inBig) {
+    public Pretender(SimplePoint inTest, SimplePoint inBig) {
         this.inTest = inTest;
         this.born = inBig;
         matches = 1;

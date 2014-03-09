@@ -4,14 +4,14 @@ import java.awt.image.BufferedImage;
 
 public class SearchPattern {
     private final BufferedImage pattern;
-    private final LamePoint transparent;
+    private final SimplePoint transparent;
 
     public SearchPattern(BufferedImage pattern) {
-        this(pattern, LamePoint.ZERO);
+        this(pattern, SimplePoint.ZERO);
     }
 
 
-    public SearchPattern(BufferedImage pattern, LamePoint transparent) {
+    public SearchPattern(BufferedImage pattern, SimplePoint transparent) {
         if (pattern == null || pattern.getHeight() < 1 || pattern.getWidth() < 1 || transparent == null) {
             throw new IllegalArgumentException();
         }
@@ -23,7 +23,7 @@ public class SearchPattern {
         return pattern;
     }
 
-    public LamePoint getTransparent() {
+    public SimplePoint getTransparent() {
         return transparent;
     }
 
@@ -39,14 +39,14 @@ public class SearchPattern {
         return pattern.getWidth();
     }
 
-    public int getRGB(LamePoint point) {
+    public int getRGB(SimplePoint point) {
         if (point == null) {
             throw new IllegalArgumentException();
         }
         return pattern.getRGB(point.getX(), point.getY());
     }
 
-    public boolean isGood(int rgb, LamePoint point) {
+    public boolean isGood(int rgb, SimplePoint point) {
         int testRGB = getRGB(point);
         return testRGB == getTransparentRGB() || testRGB == rgb;
     }
