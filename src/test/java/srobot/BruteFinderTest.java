@@ -98,10 +98,10 @@ public class BruteFinderTest {
     @Test
     public void testCombo() throws Exception {
         BufferedImage big = Loader.load("testCorners.png");
-        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("NE.png"))).size());
-        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("NW.png"))).size());
-        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("SE.png"))).size());
-        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("SW.png"))).size());
+        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("NE.png"), null)).size());
+        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("NW.png"), null)).size());
+        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("SE.png"), null)).size());
+        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("SW.png"), null)).size());
         TestCase.assertEquals(25, new BruteFinder().find(big, new SearchPattern(Loader.load("1.png"))).size());
         TestCase.assertEquals(12, new BruteFinder().find(big, new SearchPattern(Loader.load("2.png"))).size());
         TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("3.png"), new SimplePoint(0, 2))).size());

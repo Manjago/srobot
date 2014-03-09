@@ -10,24 +10,15 @@ public class SearchPattern {
         this(pattern, SimplePoint.ZERO);
     }
 
-
     public SearchPattern(BufferedImage pattern, SimplePoint transparent) {
-        if (pattern == null || pattern.getHeight() < 1 || pattern.getWidth() < 1 || transparent == null) {
+        if (pattern == null || pattern.getHeight() < 1 || pattern.getWidth() < 1 ) {
             throw new IllegalArgumentException();
         }
         this.pattern = pattern;
         this.transparent = transparent;
     }
 
-    public BufferedImage getPattern() {
-        return pattern;
-    }
-
-    public SimplePoint getTransparent() {
-        return transparent;
-    }
-
-    public int getTransparentRGB() {
+    private int getTransparentRGB() {
         return pattern.getRGB(transparent.getX(), transparent.getY());
     }
 
@@ -48,7 +39,7 @@ public class SearchPattern {
 
     public boolean isGood(int rgb, SimplePoint point) {
         int testRGB = getRGB(point);
-        return testRGB == getTransparentRGB() || testRGB == rgb;
+        return transparent != null ? testRGB == getTransparentRGB() || testRGB == rgb : testRGB == rgb;
     }
 
     @Override

@@ -18,7 +18,7 @@ public class Board {
         stopWatch.stop();
 
         stopWatch.start("NW");
-        List<SimplePoint> nwSearch = new BruteFinder().find(bigBoard, new SearchPattern(nw), 1);
+        List<SimplePoint> nwSearch = new BruteFinder().find(bigBoard, new SearchPattern(nw, null), 1);
         stopWatch.stop();
         System.out.println(nwSearch);
 
@@ -29,5 +29,14 @@ public class Board {
 
         System.out.println(stopWatch.prettyPrint());
 
+    }
+
+    public boolean init(BufferedImage image) throws IOException {
+
+        Finder finder = new BruteFinder();
+
+        //SimplePoint nw = finder.find(image,  Loader.load("nw.png"), 1);
+
+        return false;
     }
 }
