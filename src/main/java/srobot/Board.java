@@ -19,7 +19,7 @@ public class Board {
     public static void main(String[] args) throws IOException {
         StopWatch stopWatch = new StopWatch("Find");
         stopWatch.start("load");
-        BufferedImage bigBoard  = Loader.load("bigBoard.png");
+        BufferedImage bigBoard  = Loader.load("bigGotcha.png");
 
         stopWatch.stop();
 
@@ -28,9 +28,11 @@ public class Board {
         BufferedImage boardImage =  board.catchFromScratch(bigBoard);
         stopWatch.stop();
 
-        stopWatch.start("analyze");
-        board.analyze(boardImage);
-        stopWatch.stop();
+        System.out.println(boardImage);
+
+        //stopWatch.start("analyze");
+        //board.analyze(boardImage);
+        //stopWatch.stop();
 
         System.out.println(stopWatch.prettyPrint());
 
@@ -59,17 +61,24 @@ public class Board {
         final BufferedImage swpng = Loader.load("sw.png");
         List<SimplePoint> sw = finder.find(step_2, new SearchPattern(swpng, null), 2);
 
-        if (sw.size() == 0){
+        if (sw.size() != 2){
             return null;
         }
 
         Collections.sort(sw);
-        SimplePoint sw1 = sw.get(sw.size() - 1);
+        SimplePoint sw1 = sw.get(0);
+        SimplePoint sw2 = sw.get(1);
 
-        BufferedImage step_3 = step_2.getSubimage(0, 0, step_2.getWidth(), sw1.getY() + swpng.getHeight());
-        ImageIO.write(step_3, "PNG", new File("c:/temp/step_3.png"));
+        BufferedImage step_3_1 = step_2.getSubimage(0, 0, step_2.getWidth(), sw1.getY() + swpng.getHeight());
+        ImageIO.write(step_3_1, "PNG", new File("c:/temp/step_3_1.png"));
 
-        return step_3;
+        BufferedImage step_3_2 = step_2.getSubimage(0, sw1.getY() + swpng.getHeight(), step_2.getWidth(), sw2.getY() - sw1.getY());
+        ImageIO.write(step_3_2, "PNG", new File("c:/temp/step_3_2.png"));
+
+        BufferedImage result = step_3_2.getSubimage(9, 8, step_3_2.getWidth() - 9 - 3, step_3_2.getHeight() - 8 - 4);
+        ImageIO.write(result, "PNG", new File("c:/temp/result.png"));
+
+        return result;
     }
 
     void analyze(BufferedImage board) throws IOException {
