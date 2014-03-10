@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 /**
  * Hello world!
@@ -17,22 +18,13 @@ public class App
         Robot robot = new Robot();
         Rectangle area = new Rectangle(Toolkit.getDefaultToolkit().getScreenSize());
         BufferedImage image = robot.createScreenCapture(area);
-        ImageIO.write(image, "BMP", new File("c:/temp/screenShot.bmp"));
+        ImageIO.write(image, "png", new File("c:/temp/screenShot.png"));
 
-        Color c = new Color(101,201,155,255);
-        int rgb = c.getRGB();
+        Finder finder = new BruteFinder();
+        SimplePoint normal = finder.findOne(image, new SearchPattern(Loader.load("normal.png")));
+        System.out.println(normal);
 
-        for(int i = 0; i < image.getWidth(); ++i){
-            for (int j =0; j < image.getHeight(); ++j){
-                int a = image.getRGB(i, j);
-                if (a == rgb){
-                    System.out.println("catched " + i + " " + j);
-                } else
-                {
-                  //  System.out.println("NON catched " + i + " " + j + " " + Integer.toHexString(a));
-                }
-            }
-        }
-
+        List<SimplePoint> e = finder.find(image, new SearchPattern(Loader.load("empty.png")));
+        System.out.println(e.size());
     }
 }
