@@ -38,7 +38,7 @@ public class Board {
 
     public BufferedImage catchFromScratch(BufferedImage image) throws IOException {
 
-        SimplePoint normal = finder.findOne(image, new SearchPattern(Loader.load("normal.png"), null));
+        SimplePoint normal = finder.findOne(image, new SearchPattern(Loader.load("normal.png")));
 
         System.out.println(normal);
 

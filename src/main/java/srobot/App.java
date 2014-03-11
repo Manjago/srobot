@@ -30,17 +30,20 @@ public class App
         SimplePoint normal = finder.findOne(image, new SearchPattern(Loader.load("normal.png")));
         System.out.println(normal);
 
-        List<SimplePoint> closed = finder.find(image, new SearchPattern(Loader.load("closed.png"), null));
-        System.out.printf("closed %d\n", closed.size());
+        List<SimplePoint> closed = finder.find(image, new SearchPattern(Loader.load("closed.png")));
+        System.out.printf("closed %d\n%s\n\n", closed.size(), closed);
 
-        List<SimplePoint> opened = finder.find(image, new SearchPattern(Loader.load("opened.png"), null));
-        System.out.printf("opened %d\n", opened.size());
+        List<SimplePoint> opened = finder.find(image, new SearchPattern(Loader.load("opened.png")));
+        System.out.printf("opened %d\n%s\n" +
+                "\n", opened.size(), opened);
 
         List<SimplePoint> e1 = finder.find(image, new SearchPattern(Loader.load("1.png")));
-        System.out.printf("1 %d\n", e1.size());
+        System.out.printf("1 %d\n%s\n" +
+                "\n", e1.size(), e1);
 
         List<SimplePoint> e2 = finder.find(image, new SearchPattern(Loader.load("2.png")));
-        System.out.printf("2 %d\n", e2.size());
+        System.out.printf("2 %d\n%s\n" +
+                "\n", e2.size(), e2);
 
     }
 }
