@@ -3,9 +3,7 @@ package srobot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
@@ -17,6 +15,7 @@ public class Board {
     private static final Logger logger = LoggerFactory.getLogger(Board.class);
     private static final Finder finder = new BruteFinder();
     private static final Map<CellType, SearchPattern> patterns;
+    private static SearchPattern normalPattern;
 
     public Board(SimplePoint resolvedLeftCorner, BufferedImage big) {
         this.resolvedLeftCorner = resolvedLeftCorner;
@@ -28,7 +27,7 @@ public class Board {
     private NavigableSet<Integer> xCoord;
     private NavigableSet<Integer> yCoord;
 
-    static{
+    static {
         patterns = new HashMap<>();
         try {
             patterns.put(CellType.BOMB, new SearchPattern(Loader.load("bomb.png")));
@@ -46,11 +45,13 @@ public class Board {
             patterns.put(CellType.OPENED, new SearchPattern(Loader.load("opened.png")));
             patterns.put(CellType.CLOSED, new SearchPattern(Loader.load("closed.png")));
             patterns.put(CellType.QUESTION, new SearchPattern(Loader.load("question.png")));
+            normalPattern = new SearchPattern(Loader.load("normal.png"));
         } catch (IOException e) {
             logger.error("fail load picture", e);
         }
 
     }
+
     public Cells resolve() {
 
 
@@ -59,30 +60,30 @@ public class Board {
 
         Map<SimplePoint, CellType> temp = new HashMap<>();
 
-        for(Map.Entry<CellType, SearchPattern> k : patterns.entrySet()){
-           List<SimplePoint> res = finder.find(big, k.getValue());
-           for(SimplePoint point : res){
-               temp.put(point, k.getKey());
-               xCoord.add(point.getX());
-               yCoord.add(point.getY());
-           }
+        for (Map.Entry<CellType, SearchPattern> k : patterns.entrySet()) {
+            List<SimplePoint> res = finder.find(big, k.getValue());
+            for (SimplePoint point : res) {
+                temp.put(point, k.getKey());
+                xCoord.add(point.getX());
+                yCoord.add(point.getY());
+            }
         }
 
         boolean selftest = temp.size() == xCoord.size() * yCoord.size();
-        if (!selftest){
+        if (!selftest) {
             throw new IllegalStateException(String.format("something wrong: %d %d %d", temp.size(), xCoord.size(), yCoord.size()));
         }
 
         Cells result = new Cells(xCoord.size(), yCoord.size());
 
         int i = -1;
-        for(int x : xCoord){
+        for (int x : xCoord) {
             ++i;
             int j = -1;
-            for(int y : yCoord){
+            for (int y : yCoord) {
                 ++j;
                 final CellType cellType = temp.get(new SimplePoint(x, y));
-                if (cellType == null){
+                if (cellType == null) {
                     throw new IllegalStateException(String.format("null cell (%d,%d) [%d,%d]", i, j, x, y));
                 }
                 result.put(i, j, cellType);
@@ -93,45 +94,51 @@ public class Board {
     }
 
     public SimplePoint recode(SimplePoint turn) {
-        if (turn == null){
+        if (turn == null) {
             throw new IllegalArgumentException();
         }
 
-        if (turn.getX() < 0 || turn.getX() >= xCoord.size()){
+        if (turn.getX() < 0 || turn.getX() >= xCoord.size()) {
             throw new IllegalArgumentException("x");
         }
 
-        if (turn.getY() < 0 || turn.getY() >= yCoord.size()){
+        if (turn.getY() < 0 || turn.getY() >= yCoord.size()) {
             throw new IllegalArgumentException("y");
         }
 
         int i = 0;
         int xPoint = -1;
-        for(int x : xCoord){
-            if (i == turn.getX()){
+        for (int x : xCoord) {
+            if (i == turn.getX()) {
                 xPoint = x;
                 break;
             }
             ++i;
         }
-        if (xPoint == -1){
+        if (xPoint == -1) {
             throw new IllegalStateException("x");
         }
 
         int j = 0;
         int yPoint = -1;
-        for(int y : yCoord){
-            if (j == turn.getY()){
+        for (int y : yCoord) {
+            if (j == turn.getY()) {
                 yPoint = y;
                 break;
             }
             ++j;
         }
-        if (yPoint == -1){
+        if (yPoint == -1) {
             throw new IllegalStateException("y");
         }
 
         return new SimplePoint(xPoint, yPoint).add(resolvedLeftCorner);
+    }
+
+    public boolean isNormal() {
+
+        SimplePoint point = finder.findOne(big, normalPattern);
+        return point != null;
     }
 }
 
