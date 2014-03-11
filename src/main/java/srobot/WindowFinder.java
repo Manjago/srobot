@@ -6,6 +6,9 @@ import com.sun.jna.platform.win32.WinDef;
 import java.awt.*;
 
 public final class WindowFinder {
+
+    private static final int N_CMD_SHOW = 9;
+
     private WindowFinder() {
     }
 
@@ -16,7 +19,7 @@ public final class WindowFinder {
             return null;
         }
         else{
-            User32.INSTANCE.ShowWindow(hwnd, 9);
+            User32.INSTANCE.ShowWindow(hwnd, N_CMD_SHOW);
             User32.INSTANCE.SetForegroundWindow(hwnd);
             WinDef.RECT rect = new WinDef.RECT();
             User32.INSTANCE.GetWindowRect(hwnd, rect);

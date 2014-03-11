@@ -6,44 +6,37 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Hello world!
  *
  * alg0r 68 секунд профессионал
  */
-public class App 
+public final class App
 {
+    private static final Logger logger = LoggerFactory.getLogger(App.class);
+
+    private App() {
+    }
+
     public static void main( String[] args ) throws AWTException, IOException {
         Robot robot = new Robot();
         final SimpleRectangle simpleRectangle = WindowFinder.activateAndFind("Сапер");
         if (simpleRectangle == null){
-            System.out.println("no sapper");
+            logger.warn("no winmine.exe found");
             return;
         }
 
         Rectangle area = simpleRectangle.toRectangle();
         BufferedImage image = robot.createScreenCapture(area);
-        ImageIO.write(image, "png", new File("c:/temp/screenShot.png"));
 
-        Finder finder = new BruteFinder();
-        SimplePoint normal = finder.findOne(image, new SearchPattern(Loader.load("normal.png")));
-        System.out.println(normal);
+        Board board = new Board();
+        //Cells cells = board.resolve(image);
 
-        List<SimplePoint> closed = finder.find(image, new SearchPattern(Loader.load("closed.png")));
-        System.out.printf("closed %d\n%s\n\n", closed.size(), closed);
 
-        List<SimplePoint> opened = finder.find(image, new SearchPattern(Loader.load("opened.png")));
-        System.out.printf("opened %d\n%s\n" +
-                "\n", opened.size(), opened);
 
-        List<SimplePoint> e1 = finder.find(image, new SearchPattern(Loader.load("1.png")));
-        System.out.printf("1 %d\n%s\n" +
-                "\n", e1.size(), e1);
-
-        List<SimplePoint> e2 = finder.find(image, new SearchPattern(Loader.load("2.png")));
-        System.out.printf("2 %d\n%s\n" +
-                "\n", e2.size(), e2);
 
     }
 }
