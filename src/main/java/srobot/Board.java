@@ -15,7 +15,7 @@ public class Board {
     private static final Logger logger = LoggerFactory.getLogger(Board.class);
     private static final Finder finder = new BruteFinder();
     private static final Map<CellType, SearchPattern> patterns;
-    private static SearchPattern normalPattern;
+    private static final Map<BoardState, SearchPattern> states;
 
     public Board(SimplePoint resolvedLeftCorner, BufferedImage big) {
         this.resolvedLeftCorner = resolvedLeftCorner;
@@ -29,6 +29,7 @@ public class Board {
 
     static {
         patterns = new HashMap<>();
+        states = new HashMap<>();
         try {
             patterns.put(CellType.BOMB, new SearchPattern(Loader.load("bomb.png")));
             patterns.put(CellType.ERROR_BOMB, new SearchPattern(Loader.load("errorBomb.png")));
@@ -45,7 +46,12 @@ public class Board {
             patterns.put(CellType.OPENED, new SearchPattern(Loader.load("opened.png")));
             patterns.put(CellType.CLOSED, new SearchPattern(Loader.load("closed.png")));
             patterns.put(CellType.QUESTION, new SearchPattern(Loader.load("question.png")));
-            normalPattern = new SearchPattern(Loader.load("normal.png"));
+
+            states.put(BoardState.NORMAL, new SearchPattern(Loader.load("normalState.png")));
+            states.put(BoardState.WAIT, new SearchPattern(Loader.load("waitState.png")));
+            states.put(BoardState.FAIL, new SearchPattern(Loader.load("failState.png")));
+            states.put(BoardState.OK, new SearchPattern(Loader.load("finishState.png")));
+
         } catch (IOException e) {
             logger.error("fail load picture", e);
         }
@@ -135,10 +141,18 @@ public class Board {
         return new SimplePoint(xPoint, yPoint).add(resolvedLeftCorner);
     }
 
-    public boolean isNormal() {
 
-        SimplePoint point = finder.findOne(big, normalPattern);
-        return point != null;
+    public BoardState getState(){
+
+        for(Map.Entry<BoardState, SearchPattern> state : states.entrySet()){
+            SimplePoint point = finder.findOne(big, state.getValue());
+            if (point != null){
+                return state.getKey();
+            }
+        }
+        return null;
+
     }
+
 }
 

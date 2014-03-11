@@ -85,7 +85,7 @@ public class BruteFinderTest {
     @Test
     public void testNormal() throws Exception {
         BufferedImage big = Loader.load("testNormal.png");
-        BufferedImage test = Loader.load("normal.png");
+        BufferedImage test = Loader.load("normalState.png");
         List<SimplePoint> r = new BruteFinder().find(big, new SearchPattern(test));
         TestCase.assertNotNull(r);
         TestCase.assertEquals(1, r.size());
@@ -144,7 +144,7 @@ public class BruteFinderTest {
         TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("3.png"))).size());
         TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("4.png"))).size());
         TestCase.assertEquals(0, new BruteFinder().find(big, new SearchPattern(Loader.load("5.png"))).size());
-        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("normal.png"))).size());
+        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("normalState.png"))).size());
     }
 
 
