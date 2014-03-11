@@ -2,6 +2,7 @@ package srobot;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
+import java.awt.event.InputEvent;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -32,9 +33,20 @@ public final class App
         Rectangle area = simpleRectangle.toRectangle();
         BufferedImage image = robot.createScreenCapture(area);
 
-        Board board = new Board();
-        //Cells cells = board.resolve(image);
+        Board board = new Board(simpleRectangle.getLeftCorner(), image);
+        Cells cells = board.resolve();
 
+        Solver solver = new StupidSolver();
+
+        SimplePoint turn = solver.turn(cells);
+
+        SimplePoint click = board.recode(turn);
+
+        if (turn != null){
+            robot.mouseMove(click.getX() + 8, click.getY() + 8);
+            robot.mousePress(InputEvent.BUTTON1_MASK);
+            robot.mouseRelease(InputEvent.BUTTON1_MASK);
+        }
 
 
 

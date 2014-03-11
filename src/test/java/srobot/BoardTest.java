@@ -10,8 +10,8 @@ public class BoardTest {
     public void testNormal() throws Exception {
         BufferedImage big = Loader.load("test9x10.png");
 
-        Board board = new Board();
-        Cells cells = board.resolve(big);
+        Board board = new Board(SimplePoint.ZERO, big);
+        Cells cells = board.resolve();
         TestCase.assertNotNull(cells);
         TestCase.assertEquals(9, cells.getHeight());
         TestCase.assertEquals(10, cells.getWidth());

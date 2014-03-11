@@ -41,4 +41,8 @@ public class Cells {
     public void put(int i, int j, CellType cellType) {
         cells[i][j] = cellType;
     }
+
+    public CellType get(int i, int j) {
+        return cells[i][j];
+    }
 }

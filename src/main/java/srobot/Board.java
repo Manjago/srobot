@@ -1,5 +1,8 @@
 package srobot;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -11,32 +14,48 @@ import java.util.*;
  */
 public class Board {
 
-    private final Finder finder = new BruteFinder();
-    private final Map<CellType, SearchPattern> patterns;
+    private static final Logger logger = LoggerFactory.getLogger(Board.class);
+    private static final Finder finder = new BruteFinder();
+    private static final Map<CellType, SearchPattern> patterns;
 
-    public Board() throws IOException {
-        this.patterns = new HashMap<>();
-        patterns.put(CellType.BOMB, new SearchPattern(Loader.load("bomb.png")));
-        patterns.put(CellType.ERROR_BOMB, new SearchPattern(Loader.load("errorBomb.png")));
-        patterns.put(CellType.EXPLODED_BOMB, new SearchPattern(Loader.load("explodedBomb.png")));
-        patterns.put(CellType.FLAG, new SearchPattern(Loader.load("flag.png")));
-        patterns.put(CellType.INFO_1, new SearchPattern(Loader.load("1.png")));
-        patterns.put(CellType.INFO_2, new SearchPattern(Loader.load("2.png")));
-        patterns.put(CellType.INFO_3, new SearchPattern(Loader.load("3.png")));
-        patterns.put(CellType.INFO_4, new SearchPattern(Loader.load("4.png")));
-        patterns.put(CellType.INFO_5, new SearchPattern(Loader.load("5.png")));
-        patterns.put(CellType.INFO_6, new SearchPattern(Loader.load("6.png")));
-        patterns.put(CellType.INFO_7, new SearchPattern(Loader.load("7.png")));
-        patterns.put(CellType.INFO_8, new SearchPattern(Loader.load("8.png")));
-        patterns.put(CellType.OPENED, new SearchPattern(Loader.load("opened.png")));
-        patterns.put(CellType.CLOSED, new SearchPattern(Loader.load("closed.png")));
-        patterns.put(CellType.QUESTION, new SearchPattern(Loader.load("question.png")));
+    public Board(SimplePoint resolvedLeftCorner, BufferedImage big) {
+        this.resolvedLeftCorner = resolvedLeftCorner;
+        this.big = big;
     }
 
-    public Cells resolve(BufferedImage big) {
+    private final SimplePoint resolvedLeftCorner;
+    private final BufferedImage big;
+    private NavigableSet<Integer> xCoord;
+    private NavigableSet<Integer> yCoord;
 
-        NavigableSet<Integer> xCoord = new TreeSet<>();
-        NavigableSet<Integer> yCoord = new TreeSet<>();
+    static{
+        patterns = new HashMap<>();
+        try {
+            patterns.put(CellType.BOMB, new SearchPattern(Loader.load("bomb.png")));
+            patterns.put(CellType.ERROR_BOMB, new SearchPattern(Loader.load("errorBomb.png")));
+            patterns.put(CellType.EXPLODED_BOMB, new SearchPattern(Loader.load("explodedBomb.png")));
+            patterns.put(CellType.FLAG, new SearchPattern(Loader.load("flag.png")));
+            patterns.put(CellType.INFO_1, new SearchPattern(Loader.load("1.png")));
+            patterns.put(CellType.INFO_2, new SearchPattern(Loader.load("2.png")));
+            patterns.put(CellType.INFO_3, new SearchPattern(Loader.load("3.png")));
+            patterns.put(CellType.INFO_4, new SearchPattern(Loader.load("4.png")));
+            patterns.put(CellType.INFO_5, new SearchPattern(Loader.load("5.png")));
+            patterns.put(CellType.INFO_6, new SearchPattern(Loader.load("6.png")));
+            patterns.put(CellType.INFO_7, new SearchPattern(Loader.load("7.png")));
+            patterns.put(CellType.INFO_8, new SearchPattern(Loader.load("8.png")));
+            patterns.put(CellType.OPENED, new SearchPattern(Loader.load("opened.png")));
+            patterns.put(CellType.CLOSED, new SearchPattern(Loader.load("closed.png")));
+            patterns.put(CellType.QUESTION, new SearchPattern(Loader.load("question.png")));
+        } catch (IOException e) {
+            logger.error("fail load picture", e);
+        }
+
+    }
+    public Cells resolve() {
+
+
+        xCoord = new TreeSet<>();
+        yCoord = new TreeSet<>();
 
         Map<SimplePoint, CellType> temp = new HashMap<>();
 
@@ -71,6 +90,48 @@ public class Board {
         }
 
         return result;
+    }
+
+    public SimplePoint recode(SimplePoint turn) {
+        if (turn == null){
+            throw new IllegalArgumentException();
+        }
+
+        if (turn.getX() < 0 || turn.getX() >= xCoord.size()){
+            throw new IllegalArgumentException("x");
+        }
+
+        if (turn.getY() < 0 || turn.getY() >= yCoord.size()){
+            throw new IllegalArgumentException("y");
+        }
+
+        int i = 0;
+        int xPoint = -1;
+        for(int x : xCoord){
+            if (i == turn.getX()){
+                xPoint = x;
+                break;
+            }
+            ++i;
+        }
+        if (xPoint == -1){
+            throw new IllegalStateException("x");
+        }
+
+        int j = 0;
+        int yPoint = -1;
+        for(int y : yCoord){
+            if (j == turn.getY()){
+                yPoint = y;
+                break;
+            }
+            ++j;
+        }
+        if (yPoint == -1){
+            throw new IllegalStateException("y");
+        }
+
+        return new SimplePoint(xPoint, yPoint).add(resolvedLeftCorner);
     }
 }
 
