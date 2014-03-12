@@ -77,7 +77,8 @@ public class Board {
 
         boolean selftest = temp.size() == xCoord.size() * yCoord.size();
         if (!selftest) {
-            throw new IllegalStateException(String.format("something wrong: %d %d %d", temp.size(), xCoord.size(), yCoord.size()));
+            LOGGER.debug(String.format("something wrong: %d %d %d", temp.size(), xCoord.size(), yCoord.size()));
+            return null;
         }
 
         Cells result = new Cells(xCoord.size(), yCoord.size());
@@ -178,7 +179,7 @@ public class Board {
     public SimplePoint getCurrentStateAbsPos(){
         SimplePoint point = getCurrentStatePos();
         if (point != null){
-            return recode(point);
+            return point.add(resolvedLeftCorner);
         }
         return null;
     }

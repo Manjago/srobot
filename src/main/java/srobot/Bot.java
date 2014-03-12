@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 public class Bot {
 
     private static final int HALF_CELL = 8;
-    private static final int HALF_STATE = 12;
     private final Robot robot;
 
     public Bot() throws AWTException {
@@ -22,10 +21,6 @@ public class Bot {
         click(point, HALF_CELL);
     }
 
-    public void stateClick(SimplePoint point){
-        click(point, HALF_STATE);
-    }
-
     private void click(SimplePoint point, int shift){
         if (point == null){
             throw new IllegalArgumentException();
@@ -33,5 +28,9 @@ public class Bot {
         robot.mouseMove(point.getX() + shift, point.getY() + shift);
         robot.mousePress(InputEvent.BUTTON1_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
+
+        //todo сделать нормально
+
+        robot.mouseMove(5, 5);
     }
 }
