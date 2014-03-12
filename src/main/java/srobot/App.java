@@ -12,30 +12,35 @@ import java.io.IOException;
  * <p/>
  * alg0r 68 секунд профессионал
  */
-public final class App {
-    private static final Logger LOGGER = LoggerFactory.getLogger(App.class);
+public class App {
+    private final Logger logger = LoggerFactory.getLogger(App.class);
     private static final int WAIT_IN_MILLIS = 100;
+    private final Bot bot;
 
-    private App() {
-    }
 
     public static void main(String[] args) throws AWTException, IOException, InterruptedException {
+        new App().run();
+    }
+
+    public App() throws AWTException {
+        bot = new Bot();
+    }
+
+    public void run() throws AWTException, InterruptedException {
         final SimpleRectangle simpleRectangle = WindowFinder.activateAndFind("Сапер");
         if (simpleRectangle == null) {
-            LOGGER.warn("no winmine.exe found");
+            logger.warn("no winmine.exe found");
             return;
         }
 
-        Bot bot = new Bot();
-
         boolean resume = true;
         while (resume) {
-            resume = mainLoop(bot, simpleRectangle);
+            resume = mainLoop(simpleRectangle);
         }
 
     }
 
-    private static boolean mainLoop(Bot bot, SimpleRectangle simpleRectangle) throws AWTException, InterruptedException {
+    private boolean mainLoop(SimpleRectangle simpleRectangle) throws AWTException, InterruptedException {
         BufferedImage image = bot.createScreenCapture(simpleRectangle);
 
         Board board = new Board(simpleRectangle.getLeftCorner(), image);
@@ -43,7 +48,7 @@ public final class App {
         BoardState boardState = board.getState();
 
         if (boardState == null) {
-            LOGGER.info("LOST board");
+            logger.info("LOST board");
             return false;
         }
 
@@ -51,16 +56,16 @@ public final class App {
             case NORMAL:
                 break;
             case FAIL:
-                LOGGER.info("FAIL");
+                logger.info("FAIL");
                 return false;
             case OK:
-                LOGGER.info("WIN");
+                logger.info("WIN");
                 return false;
             case WAIT:
                 Thread.sleep(WAIT_IN_MILLIS);
                 return true;
             default:
-                LOGGER.error("unknown state");
+                logger.error("unknown state");
                 return false;
         }
 

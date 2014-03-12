@@ -164,5 +164,24 @@ public class Board {
 
     }
 
+    public SimplePoint getCurrentStatePos(){
+        for(Map.Entry<BoardState, SearchPattern> state : STATES.entrySet()){
+            SimplePoint point = FINDER.findOne(big, state.getValue());
+            if (point != null){
+                return point;
+            }
+        }
+        return null;
+
+    }
+
+    public SimplePoint getCurrentStateAbsPos(){
+        SimplePoint point = getCurrentStatePos();
+        if (point != null){
+            return recode(point);
+        }
+        return null;
+    }
+
 }
 
