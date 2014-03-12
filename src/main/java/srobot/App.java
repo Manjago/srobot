@@ -13,11 +13,14 @@ import java.io.IOException;
  * alg0r 68 секунд профессионал
  */
 public class App {
+    private static final int MAX_RETRY_COUNT = 10;
     private final Logger logger = LoggerFactory.getLogger(getClass());
     private static final int WAIT_IN_MILLIS = 100;
     private final Bot bot;
+    private Solver solver = new StupidSolver();
 
-    private class TaskResult {
+
+    private static final class TaskResult {
         private final TaskResultEnum taskResultEnum;
         private final SimplePoint simplePoint;
 
@@ -72,12 +75,11 @@ public class App {
 
     private TaskResult mainLoop(SimpleRectangle simpleRectangle) throws AWTException, InterruptedException {
 
-
         Board board;
         BoardState boardState;
         Cells cells = null;
 
-        int retryCount = 10;
+        int retryCount = MAX_RETRY_COUNT;
         do {
 
             BufferedImage image = bot.createScreenCapture(simpleRectangle);
@@ -135,8 +137,12 @@ public class App {
             return new TaskResult(TaskResultEnum.BREAK);
         }
 
-        Solver solver = new StupidSolver();
+        solveTurn(board, cells);
 
+        return new TaskResult(TaskResultEnum.SOFTRESUME);
+    }
+
+    private void solveTurn(Board board, Cells cells) {
         SimplePoint turn = solver.turn(cells);
 
         if (turn != null) {
@@ -146,8 +152,6 @@ public class App {
                 bot.cellClick(click, board.getResolvedLeftCorner());
             }
         }
-
-        return new TaskResult(TaskResultEnum.SOFTRESUME);
     }
 
 }
