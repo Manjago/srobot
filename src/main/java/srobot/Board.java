@@ -17,6 +17,10 @@ public class Board {
     private static final Map<CellType, SearchPattern> PATTERNS;
     private static final Map<BoardState, SearchPattern> STATES;
 
+    public SimplePoint getResolvedLeftCorner() {
+        return resolvedLeftCorner;
+    }
+
     public Board(SimplePoint resolvedLeftCorner, BufferedImage big) {
         this.resolvedLeftCorner = resolvedLeftCorner;
         this.big = big;
@@ -153,11 +157,11 @@ public class Board {
     }
 
 
-    public BoardState getState(){
+    public BoardState getState() {
 
-        for(Map.Entry<BoardState, SearchPattern> state : STATES.entrySet()){
+        for (Map.Entry<BoardState, SearchPattern> state : STATES.entrySet()) {
             SimplePoint point = FINDER.findOne(big, state.getValue());
-            if (point != null){
+            if (point != null) {
                 return state.getKey();
             }
         }
@@ -165,10 +169,10 @@ public class Board {
 
     }
 
-    public SimplePoint getCurrentStatePos(){
-        for(Map.Entry<BoardState, SearchPattern> state : STATES.entrySet()){
+    public SimplePoint getCurrentStatePos() {
+        for (Map.Entry<BoardState, SearchPattern> state : STATES.entrySet()) {
             SimplePoint point = FINDER.findOne(big, state.getValue());
-            if (point != null){
+            if (point != null) {
                 return point;
             }
         }
@@ -176,9 +180,9 @@ public class Board {
 
     }
 
-    public SimplePoint getCurrentStateAbsPos(){
+    public SimplePoint getCurrentStateAbsPos() {
         SimplePoint point = getCurrentStatePos();
-        if (point != null){
+        if (point != null) {
             return point.add(resolvedLeftCorner);
         }
         return null;

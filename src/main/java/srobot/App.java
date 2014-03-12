@@ -3,10 +3,8 @@ package srobot;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 /**
@@ -19,7 +17,7 @@ public class App {
     private static final int WAIT_IN_MILLIS = 100;
     private final Bot bot;
 
-    private class TaskResult{
+    private class TaskResult {
         private final TaskResultEnum taskResultEnum;
         private final SimplePoint simplePoint;
 
@@ -46,33 +44,33 @@ public class App {
         bot = new Bot();
     }
 
-    public void run() throws AWTException, InterruptedException, IOException {
+    public void run() throws AWTException, InterruptedException {
 
         SimpleRectangle simpleRectangle = null;
 
         TaskResult resume = new TaskResult(TaskResultEnum.HARDRESUME);
         do {
 
-            if (resume.taskResultEnum == TaskResultEnum.HARDRESUME){
+            if (resume.taskResultEnum == TaskResultEnum.HARDRESUME) {
                 simpleRectangle = WindowFinder.activateAndFind("Сапер");
                 if (simpleRectangle == null) {
                     logger.warn("no winmine.exe found");
                     return;
                 }
 
-                if (resume.simplePoint != null){
-                    bot.cellClick(resume.simplePoint);
+                if (resume.simplePoint != null) {
+                    bot.cellClick(resume.simplePoint, simpleRectangle.getLeftCorner());
                 }
 
             }
 
             resume = mainLoop(simpleRectangle);
-        }while(resume != null && !TaskResultEnum.BREAK.equals(resume.taskResultEnum));
+        } while (resume != null && !TaskResultEnum.BREAK.equals(resume.taskResultEnum));
 
 
     }
 
-    private TaskResult mainLoop(SimpleRectangle simpleRectangle) throws AWTException, InterruptedException, IOException {
+    private TaskResult mainLoop(SimpleRectangle simpleRectangle) throws AWTException, InterruptedException {
 
 
         Board board;
@@ -84,13 +82,11 @@ public class App {
 
             BufferedImage image = bot.createScreenCapture(simpleRectangle);
 
-            ImageIO.write(image, "PNG", new File("c:/tmp/screen.png"));
-
             board = new Board(simpleRectangle.getLeftCorner(), image);
 
             boardState = board.getState();
 
-            if (boardState == null){
+            if (boardState == null) {
                 --retryCount;
                 logger.debug("board not found, retry {}", retryCount);
                 Thread.sleep(WAIT_IN_MILLIS);
@@ -115,7 +111,7 @@ public class App {
 
                 cells = board.resolve();
 
-                if (cells == null){
+                if (cells == null) {
                     --retryCount;
                     logger.debug("board not full drawed, retry {}", retryCount);
                     Thread.sleep(WAIT_IN_MILLIS);
@@ -129,12 +125,12 @@ public class App {
         } while (retryCount >= 0);
 
 
-        if (boardState == null){
+        if (boardState == null) {
             logger.error("BOARD LOST");
             return new TaskResult(TaskResultEnum.BREAK);
         }
 
-        if (cells == null){
+        if (cells == null) {
             logger.error("BOARD NOT PARSED");
             return new TaskResult(TaskResultEnum.BREAK);
         }
@@ -147,7 +143,7 @@ public class App {
             SimplePoint click = board.recode(turn);
 
             if (click != null) {
-                bot.cellClick(click);
+                bot.cellClick(click, board.getResolvedLeftCorner());
             }
         }
 

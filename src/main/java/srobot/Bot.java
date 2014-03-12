@@ -17,20 +17,18 @@ public class Bot {
         return robot.createScreenCapture(rect.toRectangle());
     }
 
-    public void cellClick(SimplePoint point){
-        click(point, HALF_CELL);
+    public void cellClick(SimplePoint point, SimplePoint resume){
+        click(point, HALF_CELL, resume);
     }
 
-    private void click(SimplePoint point, int shift){
-        if (point == null){
+    private void click(SimplePoint point, int shift, SimplePoint resume){
+        if (point == null || resume == null){
             throw new IllegalArgumentException();
         }
         robot.mouseMove(point.getX() + shift, point.getY() + shift);
         robot.mousePress(InputEvent.BUTTON1_MASK);
         robot.mouseRelease(InputEvent.BUTTON1_MASK);
 
-        //todo сделать нормально
-
-        robot.mouseMove(5, 5);
+        robot.mouseMove(resume.getX(), resume.getY());
     }
 }
