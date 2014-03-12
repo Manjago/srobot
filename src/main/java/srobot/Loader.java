@@ -1,9 +1,7 @@
 package srobot;
 
 import javax.imageio.ImageIO;
-import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
@@ -18,7 +16,7 @@ public final class Loader {
     public static BufferedImage load(String name) throws IOException {
         URL url = Loader.class.getResource(name);
 
-        if (url == null){
+        if (url == null) {
             return null;
         }
 

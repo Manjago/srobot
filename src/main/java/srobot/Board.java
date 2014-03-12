@@ -12,10 +12,10 @@ import java.util.*;
  */
 public class Board {
 
-    private static final Logger logger = LoggerFactory.getLogger(Board.class);
-    private static final Finder finder = new BruteFinder();
-    private static final Map<CellType, SearchPattern> patterns;
-    private static final Map<BoardState, SearchPattern> states;
+    private static final Logger LOGGER = LoggerFactory.getLogger(Board.class);
+    private static final Finder FINDER = new BruteFinder();
+    private static final Map<CellType, SearchPattern> PATTERNS;
+    private static final Map<BoardState, SearchPattern> STATES;
 
     public Board(SimplePoint resolvedLeftCorner, BufferedImage big) {
         this.resolvedLeftCorner = resolvedLeftCorner;
@@ -28,32 +28,32 @@ public class Board {
     private NavigableSet<Integer> yCoord;
 
     static {
-        patterns = new HashMap<>();
-        states = new HashMap<>();
+        PATTERNS = new HashMap<>();
+        STATES = new HashMap<>();
         try {
-            patterns.put(CellType.BOMB, new SearchPattern(Loader.load("bomb.png")));
-            patterns.put(CellType.ERROR_BOMB, new SearchPattern(Loader.load("errorBomb.png")));
-            patterns.put(CellType.EXPLODED_BOMB, new SearchPattern(Loader.load("explodedBomb.png")));
-            patterns.put(CellType.FLAG, new SearchPattern(Loader.load("flag.png")));
-            patterns.put(CellType.INFO_1, new SearchPattern(Loader.load("1.png")));
-            patterns.put(CellType.INFO_2, new SearchPattern(Loader.load("2.png")));
-            patterns.put(CellType.INFO_3, new SearchPattern(Loader.load("3.png")));
-            patterns.put(CellType.INFO_4, new SearchPattern(Loader.load("4.png")));
-            patterns.put(CellType.INFO_5, new SearchPattern(Loader.load("5.png")));
-            patterns.put(CellType.INFO_6, new SearchPattern(Loader.load("6.png")));
-            patterns.put(CellType.INFO_7, new SearchPattern(Loader.load("7.png")));
-            patterns.put(CellType.INFO_8, new SearchPattern(Loader.load("8.png")));
-            patterns.put(CellType.OPENED, new SearchPattern(Loader.load("opened.png")));
-            patterns.put(CellType.CLOSED, new SearchPattern(Loader.load("closed.png")));
-            patterns.put(CellType.QUESTION, new SearchPattern(Loader.load("question.png")));
+            PATTERNS.put(CellType.BOMB, new SearchPattern(Loader.load("bomb.png")));
+            PATTERNS.put(CellType.ERROR_BOMB, new SearchPattern(Loader.load("errorBomb.png")));
+            PATTERNS.put(CellType.EXPLODED_BOMB, new SearchPattern(Loader.load("explodedBomb.png")));
+            PATTERNS.put(CellType.FLAG, new SearchPattern(Loader.load("flag.png")));
+            PATTERNS.put(CellType.INFO_1, new SearchPattern(Loader.load("1.png")));
+            PATTERNS.put(CellType.INFO_2, new SearchPattern(Loader.load("2.png")));
+            PATTERNS.put(CellType.INFO_3, new SearchPattern(Loader.load("3.png")));
+            PATTERNS.put(CellType.INFO_4, new SearchPattern(Loader.load("4.png")));
+            PATTERNS.put(CellType.INFO_5, new SearchPattern(Loader.load("5.png")));
+            PATTERNS.put(CellType.INFO_6, new SearchPattern(Loader.load("6.png")));
+            PATTERNS.put(CellType.INFO_7, new SearchPattern(Loader.load("7.png")));
+            PATTERNS.put(CellType.INFO_8, new SearchPattern(Loader.load("8.png")));
+            PATTERNS.put(CellType.OPENED, new SearchPattern(Loader.load("opened.png")));
+            PATTERNS.put(CellType.CLOSED, new SearchPattern(Loader.load("closed.png")));
+            PATTERNS.put(CellType.QUESTION, new SearchPattern(Loader.load("question.png")));
 
-            states.put(BoardState.NORMAL, new SearchPattern(Loader.load("normalState.png")));
-            states.put(BoardState.WAIT, new SearchPattern(Loader.load("waitState.png")));
-            states.put(BoardState.FAIL, new SearchPattern(Loader.load("failState.png")));
-            states.put(BoardState.OK, new SearchPattern(Loader.load("finishState.png")));
+            STATES.put(BoardState.NORMAL, new SearchPattern(Loader.load("normalState.png")));
+            STATES.put(BoardState.WAIT, new SearchPattern(Loader.load("waitState.png")));
+            STATES.put(BoardState.FAIL, new SearchPattern(Loader.load("failState.png")));
+            STATES.put(BoardState.OK, new SearchPattern(Loader.load("finishState.png")));
 
         } catch (IOException e) {
-            logger.error("fail load picture", e);
+            LOGGER.error("fail load picture", e);
         }
 
     }
@@ -66,8 +66,8 @@ public class Board {
 
         Map<SimplePoint, CellType> temp = new HashMap<>();
 
-        for (Map.Entry<CellType, SearchPattern> k : patterns.entrySet()) {
-            List<SimplePoint> res = finder.find(big, k.getValue());
+        for (Map.Entry<CellType, SearchPattern> k : PATTERNS.entrySet()) {
+            List<SimplePoint> res = FINDER.find(big, k.getValue());
             for (SimplePoint point : res) {
                 temp.put(point, k.getKey());
                 xCoord.add(point.getX());
@@ -112,19 +112,14 @@ public class Board {
             throw new IllegalArgumentException("y");
         }
 
-        int i = 0;
-        int xPoint = -1;
-        for (int x : xCoord) {
-            if (i == turn.getX()) {
-                xPoint = x;
-                break;
-            }
-            ++i;
-        }
-        if (xPoint == -1) {
-            throw new IllegalStateException("x");
-        }
+        int xPoint = recodeX(turn);
 
+        int yPoint = recodeY(turn);
+
+        return new SimplePoint(xPoint, yPoint).add(resolvedLeftCorner);
+    }
+
+    private int recodeY(SimplePoint turn) {
         int j = 0;
         int yPoint = -1;
         for (int y : yCoord) {
@@ -137,15 +132,30 @@ public class Board {
         if (yPoint == -1) {
             throw new IllegalStateException("y");
         }
+        return yPoint;
+    }
 
-        return new SimplePoint(xPoint, yPoint).add(resolvedLeftCorner);
+    private int recodeX(SimplePoint turn) {
+        int i = 0;
+        int xPoint = -1;
+        for (int x : xCoord) {
+            if (i == turn.getX()) {
+                xPoint = x;
+                break;
+            }
+            ++i;
+        }
+        if (xPoint == -1) {
+            throw new IllegalStateException("x");
+        }
+        return xPoint;
     }
 
 
     public BoardState getState(){
 
-        for(Map.Entry<BoardState, SearchPattern> state : states.entrySet()){
-            SimplePoint point = finder.findOne(big, state.getValue());
+        for(Map.Entry<BoardState, SearchPattern> state : STATES.entrySet()){
+            SimplePoint point = FINDER.findOne(big, state.getValue());
             if (point != null){
                 return state.getKey();
             }
