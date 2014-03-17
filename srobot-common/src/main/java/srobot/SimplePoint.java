@@ -21,14 +21,6 @@ public class SimplePoint implements Comparable<SimplePoint> {
         this.y = y;
     }
 
-    public SimplePoint nextHor() {
-        return new SimplePoint(x + 1, y);
-    }
-
-    public SimplePoint nextVer() {
-        return new SimplePoint(0, y + 1);
-    }
-
     public SimplePoint add(SimplePoint p) {
         if (p == null) {
             return this;

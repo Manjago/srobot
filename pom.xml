@@ -8,6 +8,7 @@
     <modules>
         <module>srobot-winmine</module>
         <module>srobot-common</module>
+        <module>srobot-rsolver</module>
     </modules>
     <packaging>pom</packaging>
 

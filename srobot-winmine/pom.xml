@@ -33,6 +33,11 @@
             <artifactId>srobot-common</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>srobot</groupId>
+            <artifactId>srobot-rsolver</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 
 </project>

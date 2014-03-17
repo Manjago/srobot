@@ -1,4 +1,9 @@
-package srobot;
+package solver;
+
+import srobot.CellType;
+import srobot.Cells;
+import srobot.SimplePoint;
+import srobot.Solver;
 
 public class StupidSolver implements Solver {
     @Override
