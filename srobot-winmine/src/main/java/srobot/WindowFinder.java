@@ -3,8 +3,6 @@ package srobot;
 import com.sun.jna.platform.win32.User32;
 import com.sun.jna.platform.win32.WinDef;
 
-import java.awt.*;
-
 public final class WindowFinder {
 
     private static final int N_CMD_SHOW = 9;
