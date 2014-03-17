@@ -1,6 +1,9 @@
 package srobot;
 
-public class Cells {
+import srobot.lamelinq.Linqable;
+import srobot.lamelinq.Predicate;
+
+public class Cells implements Linqable<CellInfo, CellType> {
     private final CellType[][] cells;
     private final int width;
 
@@ -44,5 +47,18 @@ public class Cells {
 
     public CellType get(int i, int j) {
         return cells[i][j];
+    }
+
+    @Override
+    public CellInfo findFirst(Predicate<CellType> predicate) {
+        for(int i = 0; i < getWidth(); ++i){
+            for (int j = 0; j < getHeight(); ++j){
+
+                if (predicate.test(get(i, j))){
+                    return new CellInfo(get(i, j), new SimplePoint(i, j));
+                }
+            }
+        }
+        return null;
     }
 }
