@@ -1,5 +1,5 @@
 package srobot;
 
 public interface Solver {
-    SimplePoint turn(Cells cells);
+    Prediction predict(Cells cells);
 }

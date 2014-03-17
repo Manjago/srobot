@@ -144,15 +144,21 @@ public class App {
     }
 
     private void solveTurn(Board board, Cells cells) {
-        SimplePoint turn = solver.turn(cells);
 
-        if (turn != null) {
-            SimplePoint click = board.recode(turn);
+        Prediction prediction = solver.predict(cells);
+        if (prediction != null && prediction.getSimplePoint() != null){
+            SimplePoint click = board.recode(prediction.getSimplePoint());
 
             if (click != null) {
                 bot.cellClick(click, board.getResolvedLeftCorner());
+            } else {
+                throw new AppException(String.format("bad click"));
             }
+
+        } else {
+            throw new AppException(String.format("bad prediction %s", String.valueOf(prediction)));
         }
+
     }
 
 }
