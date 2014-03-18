@@ -47,7 +47,7 @@ public class Board {
             PATTERNS.put(CellType.INFO_6, new SearchPattern(Loader.load("6.png")));
             PATTERNS.put(CellType.INFO_7, new SearchPattern(Loader.load("7.png")));
             PATTERNS.put(CellType.INFO_8, new SearchPattern(Loader.load("8.png")));
-            PATTERNS.put(CellType.OPENED, new SearchPattern(Loader.load("opened.png")));
+            PATTERNS.put(CellType.EMPTY, new SearchPattern(Loader.load("opened.png")));
             PATTERNS.put(CellType.CLOSED, new SearchPattern(Loader.load("closed.png")));
             PATTERNS.put(CellType.QUESTION, new SearchPattern(Loader.load("question.png")));
 

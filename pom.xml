@@ -9,6 +9,7 @@
         <module>srobot-winmine</module>
         <module>srobot-common</module>
         <module>srobot-rsolver</module>
+        <module>srobot-dsolver</module>
     </modules>
     <packaging>pom</packaging>
 
