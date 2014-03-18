@@ -3,7 +3,7 @@ package srobot;
 import srobot.lamelinq.Linqable;
 import srobot.lamelinq.Predicate;
 
-public class Cells implements Linqable<CellInfo, CellType> {
+public class Cells implements Linqable<CellInfo> {
     private final CellType[][] cells;
     private final int width;
 
@@ -50,12 +50,13 @@ public class Cells implements Linqable<CellInfo, CellType> {
     }
 
     @Override
-    public CellInfo findFirst(Predicate<CellType> predicate) {
+    public CellInfo findFirst(Predicate<CellInfo> predicate) {
         for(int i = 0; i < getWidth(); ++i){
             for (int j = 0; j < getHeight(); ++j){
 
-                if (predicate.test(get(i, j))){
-                    return new CellInfo(get(i, j), new SimplePoint(i, j));
+                final CellInfo cellInfo = new CellInfo(get(i, j), new SimplePoint(i, j));
+                if (predicate.test(cellInfo)){
+                    return cellInfo;
                 }
             }
         }

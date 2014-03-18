@@ -146,11 +146,15 @@ public class App {
     private void solveTurn(Board board, Cells cells) {
 
         Prediction prediction = solver.predict(cells);
-        if (prediction != null && prediction.getSimplePoint() != null){
+        if (prediction != null && prediction.getSimplePoint() != null) {
             SimplePoint click = board.recode(prediction.getSimplePoint());
 
             if (click != null) {
-                bot.cellClick(click, board.getResolvedLeftCorner());
+                bot.cellClick(click, board.getResolvedLeftCorner(),
+                        Prediction.PredictionType.MINE.equals(prediction.getPredictionType()) ?
+                                Bot.MouseButton.RIGHT :
+                                Bot.MouseButton.LEFT
+                );
             } else {
                 throw new AppException(String.format("bad click"));
             }
