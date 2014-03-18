@@ -3,6 +3,9 @@ package srobot;
 import srobot.lamelinq.Linqable;
 import srobot.lamelinq.Predicate;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Cells implements Linqable<CellInfo> {
     private final CellType[][] cells;
     private final int width;
@@ -41,12 +44,19 @@ public class Cells implements Linqable<CellInfo> {
         return sb.toString();
     }
 
+    public boolean isCorrect(int i, int j){
+        return (i >=0 && i < width && j >=0 && j < height );
+    }
+
     public void put(int i, int j, CellType cellType) {
         cells[i][j] = cellType;
     }
 
     public CellType get(int i, int j) {
-        return cells[i][j];
+        if (isCorrect(i, j)){
+            return cells[i][j];
+        }
+        throw new AppException(String.format("bad get %d %d for cells %d %d", i, j, width, height));
     }
 
     @Override
@@ -61,5 +71,20 @@ public class Cells implements Linqable<CellInfo> {
             }
         }
         return null;
+    }
+
+    @Override
+    public List<CellInfo> findAll(Predicate<CellInfo> predicate) {
+        List<CellInfo> result = new ArrayList<>();
+        for(int i = 0; i < getWidth(); ++i){
+            for (int j = 0; j < getHeight(); ++j){
+
+                final CellInfo cellInfo = new CellInfo(get(i, j), new SimplePoint(i, j));
+                if (predicate.test(cellInfo)){
+                    result.add(cellInfo);
+                }
+            }
+        }
+        return result;
     }
 }
