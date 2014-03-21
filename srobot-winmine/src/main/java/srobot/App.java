@@ -74,7 +74,7 @@ public class App {
 
     }
 
-    private TaskResult mainLoop(SimpleRectangle simpleRectangle) throws AWTException, InterruptedException {
+    private TaskResult mainLoop(SimpleRectangle simpleRectangle) throws InterruptedException {
 
         Board board;
         BoardState boardState;
