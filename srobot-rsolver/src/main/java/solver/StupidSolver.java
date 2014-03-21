@@ -4,6 +4,7 @@ import srobot.*;
 import srobot.lamelinq.Predicate;
 
 import java.util.List;
+import java.util.Map;
 
 public class StupidSolver implements Solver {
 

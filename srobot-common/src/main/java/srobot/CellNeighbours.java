@@ -17,8 +17,7 @@ public class CellNeighbours implements Linqable<CellInfo>{
                 final int i = start.getX() + iShift;
                 final int j = start.getY() + jShift;
                 if (cells.isCorrect(i, j)){
-                    CellType cellType = cells.get(i, j);
-                    data.add(new CellInfo(cellType, new SimplePoint(i, j)));
+                    data.add(cells.get(i, j));
                 }
 
             }

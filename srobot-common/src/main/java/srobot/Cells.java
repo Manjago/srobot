@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class Cells implements Linqable<CellInfo> {
-    private final Map<SimplePoint, CellType> cells;
+    private final Map<SimplePoint, CellInfo> cells;
     private final int width;
 
     public int getHeight() {
@@ -34,32 +34,33 @@ public class Cells implements Linqable<CellInfo> {
 
     public String debugLine(int line) {
 
-        if (line < 0 || line >= height){
+        if (line < 0 || line >= height) {
             throw new IllegalArgumentException();
         }
 
         StringBuilder sb = new StringBuilder();
 
-        for (int i = 0; i < width; ++i){
-            sb.append(get(i, line).getDebugChar());
+        for (int i = 0; i < width; ++i) {
+            sb.append(get(i, line).getCellType().getDebugChar());
         }
 
         return sb.toString();
     }
 
-    public boolean isCorrect(int i, int j){
-        return (i >=0 && i < width && j >=0 && j < height );
+    public boolean isCorrect(int i, int j) {
+        return (i >= 0 && i < width && j >= 0 && j < height);
     }
 
     public void put(int i, int j, CellType cellType) {
-        if (!isCorrect(i, j)){
+        if (!isCorrect(i, j)) {
             throw new AppException(String.format("Bad put for %d %d", i, j));
         }
-        cells.put(new SimplePoint(i, j), cellType);
+        final SimplePoint coords = new SimplePoint(i, j);
+        cells.put(coords, new CellInfo(cellType, coords));
     }
 
-    public CellType get(int i, int j) {
-        if (isCorrect(i, j)){
+    public CellInfo get(int i, int j) {
+        if (isCorrect(i, j)) {
             return cells.get(new SimplePoint(i, j));
         }
         throw new AppException(String.format("bad get %d %d for cells %d %d", i, j, width, height));
@@ -67,11 +68,11 @@ public class Cells implements Linqable<CellInfo> {
 
     @Override
     public CellInfo findFirst(Predicate<CellInfo> predicate) {
-        for(int i = 0; i < getWidth(); ++i){
-            for (int j = 0; j < getHeight(); ++j){
+        for (int i = 0; i < getWidth(); ++i) {
+            for (int j = 0; j < getHeight(); ++j) {
 
-                final CellInfo cellInfo = new CellInfo(get(i, j), new SimplePoint(i, j));
-                if (predicate.test(cellInfo)){
+                final CellInfo cellInfo = get(i, j);
+                if (predicate.test(cellInfo)) {
                     return cellInfo;
                 }
             }
@@ -82,11 +83,11 @@ public class Cells implements Linqable<CellInfo> {
     @Override
     public List<CellInfo> findAll(Predicate<CellInfo> predicate) {
         List<CellInfo> result = new ArrayList<>();
-        for(int i = 0; i < getWidth(); ++i){
-            for (int j = 0; j < getHeight(); ++j){
+        for (int i = 0; i < getWidth(); ++i) {
+            for (int j = 0; j < getHeight(); ++j) {
 
-                final CellInfo cellInfo = new CellInfo(get(i, j), new SimplePoint(i, j));
-                if (predicate.test(cellInfo)){
+                final CellInfo cellInfo = get(i, j);
+                if (predicate.test(cellInfo)) {
                     result.add(cellInfo);
                 }
             }
