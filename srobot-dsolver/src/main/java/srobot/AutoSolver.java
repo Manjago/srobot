@@ -1,20 +1,30 @@
 package srobot;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Predicate;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class AutoSolver implements Solver {
+
+    private final CellAnalyzerFactory cellAnalyzerFactory;
+
+    public AutoSolver(CellAnalyzerFactory cellAnalyzerFactory) {
+        this.cellAnalyzerFactory = cellAnalyzerFactory;
+    }
+
     @Override
     public Prediction predict(Cells cells) {
 
 
         List<CellInfo> emptyCells = getEmptyCells(cells);
 
-        //emptyCells.stream().forEach();
+        Optional<Prediction> prediction = emptyCells.stream()
+                .parallel()
+                .map(cellInfo -> cellAnalyzerFactory.create().makePredict(cellInfo))
+                .filter(prediction1 -> prediction1 != null)
+                .findAny();
 
-        return null;
+        return prediction.orElse(null);
     }
 
     public List<CellInfo> getEmptyCells(Cells cells) {
