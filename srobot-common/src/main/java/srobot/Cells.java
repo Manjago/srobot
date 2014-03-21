@@ -4,10 +4,12 @@ import srobot.lamelinq.Linqable;
 import srobot.lamelinq.Predicate;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Cells implements Linqable<CellInfo> {
-    private final CellType[][] cells;
+    private final Map<SimplePoint, CellType> cells;
     private final int width;
 
     public int getHeight() {
@@ -24,9 +26,10 @@ public class Cells implements Linqable<CellInfo> {
         if (width < 1 || height < 1) {
             throw new IllegalArgumentException();
         }
-        this.cells = new CellType[width][height];
+        this.cells = new HashMap<>();
         this.width = width;
         this.height = height;
+
     }
 
     public String debugLine(int line) {
@@ -38,7 +41,7 @@ public class Cells implements Linqable<CellInfo> {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < width; ++i){
-            sb.append(cells[i][line].getDebugChar());
+            sb.append(get(i, line).getDebugChar());
         }
 
         return sb.toString();
@@ -49,12 +52,15 @@ public class Cells implements Linqable<CellInfo> {
     }
 
     public void put(int i, int j, CellType cellType) {
-        cells[i][j] = cellType;
+        if (!isCorrect(i, j)){
+            throw new AppException(String.format("Bad put for %d %d", i, j));
+        }
+        cells.put(new SimplePoint(i, j), cellType);
     }
 
     public CellType get(int i, int j) {
         if (isCorrect(i, j)){
-            return cells[i][j];
+            return cells.get(new SimplePoint(i, j));
         }
         throw new AppException(String.format("bad get %d %d for cells %d %d", i, j, width, height));
     }
