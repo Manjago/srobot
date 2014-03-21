@@ -5,10 +5,15 @@ import srobot.lamelinq.Predicate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Stream;
 
 public class CellNeighbours implements Linqable<CellInfo>{
 
     private final List<CellInfo> data = new ArrayList<>();
+
+    public Stream<CellInfo> asStream(){
+        return data.stream();
+    }
 
     public CellNeighbours(Cells cells, SimplePoint start) {
         for (int iShift = -1; iShift <= 1; ++iShift){

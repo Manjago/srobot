@@ -1,10 +1,9 @@
 package solver;
 
 import srobot.*;
-import srobot.lamelinq.Predicate;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Optional;
 
 public class StupidSolver implements Solver {
 
@@ -16,10 +15,12 @@ public class StupidSolver implements Solver {
             return result;
         }
 
-        CellInfo firstClosed = cells.findFirst(new OneCellTypePredicate(CellType.CLOSED));
+        Optional<CellInfo> anyClosed = cells.asStream()
+                .filter(cellInfo -> cellInfo.getCellType() == CellType.CLOSED)
+                .findAny();
 
-        if (firstClosed != null) {
-            return new Prediction(firstClosed.getCoords(), Prediction.PredictionType.FREE);
+        if (anyClosed.isPresent()) {
+            return new Prediction(anyClosed.get().getCoords(), Prediction.PredictionType.FREE);
         }
 
         return null;
@@ -27,34 +28,37 @@ public class StupidSolver implements Solver {
 
     private Prediction state1with1closed(final Cells cells) {
 
-        CellInfo cellInfo = cells.findFirst(new Predicate<CellInfo>() {
-            @Override
-            public boolean test(CellInfo item) {
+        Optional<CellInfo> anyCellInfo = cells.asStream()
+                .filter(item -> {
+                    if (!CellType.INFO_1.equals(item.getCellType())) {
+                        return false;
+                    }
 
-                if (!CellType.INFO_1.equals(item.getCellType())) {
-                    return false;
-                }
+                    final CellNeighbours cellNeighbours = new CellNeighbours(cells, item.getCoords());
+                    List<CellInfo> neighboursClosed = cellNeighbours.findAll(new OneCellTypePredicate(CellType.CLOSED));
 
-                final CellNeighbours cellNeighbours = new CellNeighbours(cells, item.getCoords());
-                List<CellInfo> neighboursClosed = cellNeighbours.findAll(new OneCellTypePredicate(CellType.CLOSED));
+                    if (neighboursClosed.size() != 1) {
+                        return false;
+                    }
 
-                if (neighboursClosed.size() != 1) {
-                    return false;
-                }
+                    Optional<CellInfo> anyFlagged = cellNeighbours.asStream()
+                            .filter(cellInfo -> cellInfo.getCellType() == CellType.FLAG).findAny();
+                    return !anyFlagged.isPresent();
 
-                CellInfo flagged = cellNeighbours.findFirst(new OneCellTypePredicate(CellType.FLAG));
-                return flagged == null;
-            }
-        });
+                })
+                .findAny();
 
-
-        if (cellInfo == null) {
+        if (!anyCellInfo.isPresent()) {
             return null;
         }
 
-        CellInfo result = new CellNeighbours(cells, cellInfo.getCoords()).findFirst(new OneCellTypePredicate(CellType.CLOSED));
+        Optional<CellInfo> anyResult = new CellNeighbours(cells, anyCellInfo.get().getCoords()).asStream()
+                .filter(cellInfo -> cellInfo.getCellType() == CellType.CLOSED).findAny();
 
-        return new Prediction(result.getCoords(), Prediction.PredictionType.MINE);
+        if (!anyResult.isPresent()) {
+            throw new AppException("algo exception");
+        }
 
+        return new Prediction(anyResult.get().getCoords(), Prediction.PredictionType.MINE);
     }
 }

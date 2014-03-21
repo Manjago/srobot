@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Stream;
 
 public class Cells implements Linqable<CellInfo> {
     private final Map<SimplePoint, CellInfo> cells;
@@ -21,6 +22,10 @@ public class Cells implements Linqable<CellInfo> {
     }
 
     private final int height;
+
+    public Stream<CellInfo> asStream(){
+        return cells.values().stream();
+    }
 
     public Cells(int width, int height) {
         if (width < 1 || height < 1) {
