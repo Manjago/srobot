@@ -1,7 +1,5 @@
 package srobot;
 
-import srobot.lamelinq.Predicate;
-
 import java.util.Arrays;
 import java.util.List;
 

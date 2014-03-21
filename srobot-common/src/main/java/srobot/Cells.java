@@ -1,15 +1,10 @@
 package srobot;
 
-import srobot.lamelinq.Linqable;
-import srobot.lamelinq.Predicate;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.stream.Stream;
 
-public class Cells implements Linqable<CellInfo> {
+public class Cells {
     private final Map<SimplePoint, CellInfo> cells;
     private final int width;
 
@@ -23,7 +18,7 @@ public class Cells implements Linqable<CellInfo> {
 
     private final int height;
 
-    public Stream<CellInfo> asStream(){
+    public Stream<CellInfo> asStream() {
         return cells.values().stream();
     }
 
@@ -71,32 +66,4 @@ public class Cells implements Linqable<CellInfo> {
         throw new AppException(String.format("bad get %d %d for cells %d %d", i, j, width, height));
     }
 
-    @Override
-    public CellInfo findFirst(Predicate<CellInfo> predicate) {
-        for (int i = 0; i < getWidth(); ++i) {
-            for (int j = 0; j < getHeight(); ++j) {
-
-                final CellInfo cellInfo = get(i, j);
-                if (predicate.test(cellInfo)) {
-                    return cellInfo;
-                }
-            }
-        }
-        return null;
-    }
-
-    @Override
-    public List<CellInfo> findAll(Predicate<CellInfo> predicate) {
-        List<CellInfo> result = new ArrayList<>();
-        for (int i = 0; i < getWidth(); ++i) {
-            for (int j = 0; j < getHeight(); ++j) {
-
-                final CellInfo cellInfo = get(i, j);
-                if (predicate.test(cellInfo)) {
-                    result.add(cellInfo);
-                }
-            }
-        }
-        return result;
-    }
 }
