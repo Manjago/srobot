@@ -2,6 +2,7 @@ package srobot;
 
 import srobot.lamelinq.Predicate;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AutoSolver implements Solver {
@@ -15,12 +16,9 @@ public class AutoSolver implements Solver {
     }
 
     public List<CellInfo> getEmptyCells(Cells cells) {
-        return cells.findAll(new Predicate<CellInfo>() {
-            @Override
-            public boolean test(CellInfo item) {
-                return item.getCellType().getState() == CellType.State.OPENED;
-            }
-        });
+        return Arrays.asList(cells.asStream()
+                .filter(cellInfo -> cellInfo.getCellType().getState() == CellType.State.OPENED)
+                .toArray(CellInfo[]::new));
     }
 }
 
