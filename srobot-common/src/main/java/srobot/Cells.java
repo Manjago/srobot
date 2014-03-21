@@ -1,12 +1,33 @@
 package srobot;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Cells {
     private final Map<SimplePoint, CellInfo> cells;
     private final int width;
+    private final int height;
+
+    public Cells(Collection<CellInfo> data) {
+        this.cells = data.stream().collect(Collectors.toMap((Function<CellInfo, SimplePoint>) CellInfo::getCoords, o -> o));
+
+        width = data.stream()
+                .map(cellInfo -> cellInfo.getCoords().getX())
+                .reduce(Integer.MIN_VALUE, Integer::max) + 1;
+
+        height = data.stream()
+                .map(cellInfo -> cellInfo.getCoords()
+                        .getY()).reduce(Integer.MIN_VALUE, Integer::max) + 1;
+
+        if (width <= 0 || height <= 0 || data.size() != width * height) {
+            throw new IllegalStateException(String.format("bad cells width=%d height=%d size=%d", width, height, data.size()));
+        }
+
+    }
 
     public int getHeight() {
         return height;
@@ -16,20 +37,8 @@ public class Cells {
         return width;
     }
 
-    private final int height;
-
     public Stream<CellInfo> asStream() {
         return cells.values().stream();
-    }
-
-    public Cells(int width, int height) {
-        if (width < 1 || height < 1) {
-            throw new IllegalArgumentException();
-        }
-        this.cells = new HashMap<>();
-        this.width = width;
-        this.height = height;
-
     }
 
     public String debugLine(int line) {
@@ -49,14 +58,6 @@ public class Cells {
 
     public boolean isCorrect(int i, int j) {
         return (i >= 0 && i < width && j >= 0 && j < height);
-    }
-
-    public void put(int i, int j, CellType cellType) {
-        if (!isCorrect(i, j)) {
-            throw new AppException(String.format("Bad put for %d %d", i, j));
-        }
-        final SimplePoint coords = new SimplePoint(i, j);
-        cells.put(coords, new CellInfo(cellType, coords));
     }
 
     public CellInfo get(int i, int j) {

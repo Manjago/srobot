@@ -85,7 +85,13 @@ public class Board {
             return null;
         }
 
-        Cells result = new Cells(xCoord.size(), yCoord.size());
+        return makeCells(temp);
+    }
+
+    private Cells makeCells(Map<SimplePoint, CellType> temp) {
+
+
+        Set<CellInfo> data = new HashSet<>();
 
         int i = -1;
         for (int x : xCoord) {
@@ -97,11 +103,12 @@ public class Board {
                 if (cellType == null) {
                     throw new IllegalStateException(String.format("null cell (%d,%d) [%d,%d]", i, j, x, y));
                 }
-                result.put(i, j, cellType);
+                data.add(new CellInfo(cellType, new SimplePoint(i, j)));
             }
         }
 
-        return result;
+
+        return new Cells(data);
     }
 
     public SimplePoint recode(SimplePoint turn) {
