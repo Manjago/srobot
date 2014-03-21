@@ -2,10 +2,9 @@ package solver;
 
 import srobot.*;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class StupidSolver implements Solver {
 
@@ -38,8 +37,8 @@ public class StupidSolver implements Solver {
 
                     final CellNeighbours cellNeighbours = new CellNeighbours(cells, item.getCoords());
 
-                    List<CellInfo> neighboursClosed = Arrays.asList(cellNeighbours.asStream()
-                            .filter(cellInfo -> cellInfo.getCellType() == CellType.CLOSED).toArray(CellInfo[]::new));
+                    List<CellInfo> neighboursClosed = cellNeighbours.asStream()
+                            .filter(cellInfo -> cellInfo.getCellType() == CellType.CLOSED).collect(Collectors.toList());
 
                     if (neighboursClosed.size() != 1) {
                         return false;
