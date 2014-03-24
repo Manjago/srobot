@@ -1,6 +1,6 @@
 package srobot;
 
-public class CellInfo {
+public class CellInfo implements Comparable<CellInfo>{
     private final CellType cellType;
     private final SimplePoint coords;
 
@@ -23,5 +23,10 @@ public class CellInfo {
                 "cellType=" + cellType +
                 ", coords=" + coords +
                 '}';
+    }
+
+    @Override
+    public int compareTo(CellInfo o) {
+        return getCoords().compareTo(o.getCoords());
     }
 }
