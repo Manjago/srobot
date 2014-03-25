@@ -1,16 +1,12 @@
 package srobot;
 
-import java.util.ArrayList;
-import java.util.List;
+import javax.annotation.Nonnull;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 public class CellNeighbours {
 
-    private final List<CellInfo> data = new ArrayList<>();
-
-    public Stream<CellInfo> asStream() {
-        return data.stream();
-    }
+    private final Bag<CellInfo, SimplePoint> data = new Bag<>();
 
     public CellNeighbours(Cells cells, SimplePoint start) {
         for (int iShift = -1; iShift <= 1; ++iShift) {
@@ -27,4 +23,18 @@ public class CellNeighbours {
 
     }
 
+    public Stream<CellInfo> asStream() {
+        return data.asStream();
+    }
+
+    public boolean contains(@Nonnull SimplePoint point) {
+        Objects.requireNonNull(point, "SimplePoint == null");
+        return data.contains(point);
+    }
+
+    public CellInfo get(@Nonnull SimplePoint pretender) {
+        Objects.requireNonNull(pretender);
+
+        return data.get(pretender);
+    }
 }

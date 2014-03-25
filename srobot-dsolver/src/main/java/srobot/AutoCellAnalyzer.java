@@ -2,6 +2,7 @@ package srobot;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.function.Supplier;
 
 public class AutoCellAnalyzer implements CellAnalyzer {
 
@@ -17,8 +18,10 @@ public class AutoCellAnalyzer implements CellAnalyzer {
 
         CellNeighbours cellNeighbours = new CellNeighbours(cells, cellInfo.getCoords());
 
-        ElementCollector collector = cellNeighbours.asStream().collect(ElementCollector::new
-                , ElementCollector::accept, ElementCollector::accept
+        ElementCollector collector = cellNeighbours.asStream().collect(
+                () -> new ElementCollector(cellNeighbours)
+                , ElementCollector::accept
+                , ElementCollector::accept
         );
 
         Elements elements = collector.getElements();

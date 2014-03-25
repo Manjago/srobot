@@ -1,5 +1,9 @@
 package srobot;
 
+
+import javax.annotation.Nonnull;
+import java.util.Objects;
+
 /**
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
@@ -66,10 +70,8 @@ public class SimplePoint implements Comparable<SimplePoint> {
     }
 
     @Override
-    public int compareTo(SimplePoint o) {
-        if (o == null) {
-            return 1;
-        }
+    public int compareTo(@Nonnull SimplePoint o) {
+        Objects.requireNonNull(o, "SimplePoint == null");
         int preCompare = Integer.valueOf(getX()).compareTo(o.getX());
         if (preCompare != 0) {
             return preCompare;
