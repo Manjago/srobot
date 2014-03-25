@@ -2,6 +2,7 @@ package srobot;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.function.Function;
 
 public class Element implements BagItem<Element, Element> {
     private final Bag<CellInfo, SimplePoint> cellInfos = new Bag<>();

@@ -32,7 +32,7 @@ public class CellInfo implements BagItem<CellInfo, SimplePoint> {
 
         CellInfo cellInfo = (CellInfo) o;
 
-        if (!coords.equals(cellInfo.coords)) {return false;}
+        if (!getKey().equals(cellInfo. getKey())) {return false;}
 
         return true;
     }

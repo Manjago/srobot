@@ -8,9 +8,14 @@ import java.util.Objects;
  * @author Kirill Temnenkov (kdtemnen@mts.ru)
  */
 public class SimplePoint implements Comparable<SimplePoint> {
+    public static final SimplePoint ZERO = new SimplePoint(0, 0);
     private final int x;
     private final int y;
-    public static final SimplePoint ZERO = new SimplePoint(0, 0);
+
+    public SimplePoint(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
 
     public int getX() {
         return x;
@@ -18,11 +23,6 @@ public class SimplePoint implements Comparable<SimplePoint> {
 
     public int getY() {
         return y;
-    }
-
-    public SimplePoint(int x, int y) {
-        this.x = x;
-        this.y = y;
     }
 
     public SimplePoint add(SimplePoint p) {
@@ -79,5 +79,9 @@ public class SimplePoint implements Comparable<SimplePoint> {
             return Integer.valueOf(getY()).compareTo(o.getY());
         }
 
+    }
+
+    public String strKey() {
+        return String.format("(%S,%d)", x, y);
     }
 }
