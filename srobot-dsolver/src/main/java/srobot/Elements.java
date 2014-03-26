@@ -1,7 +1,6 @@
 package srobot;
 
 public class Elements {
-    // todo сделать ключ
     private final Bag<Element, Element> elementBag;
 
     public Elements() {
