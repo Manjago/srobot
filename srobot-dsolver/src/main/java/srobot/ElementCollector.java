@@ -31,11 +31,16 @@ public class ElementCollector {
     void tryAdd(Element element, CellInfo lastAdded){
         for(SimplePoint shift : SHIFTS){
             SimplePoint pretender = lastAdded.getCoords().add(shift);
+
             if (cellNeighbours.contains(pretender)){
                 CellInfo cellInfoPretender = cellNeighbours.get(pretender);
                 Element elementPretender = element.add(cellInfoPretender);
-            }
 
+                if (!elements.contains(elementPretender)){
+                    elements.add(elementPretender);
+                    tryAdd(elementPretender, cellInfoPretender);
+                }
+            }
         }
 
     }

@@ -18,4 +18,8 @@ public class Elements {
     public Bag<Element, Element> getElementBag() {
         return new Bag<>(elementBag);
     }
+
+    public boolean contains(Element elementPretender) {
+        return elementBag.contains(elementPretender);
+    }
 }
