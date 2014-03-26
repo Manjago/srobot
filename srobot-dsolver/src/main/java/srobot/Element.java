@@ -3,6 +3,7 @@ package srobot;
 import javax.annotation.Nonnull;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -55,6 +56,16 @@ public class Element implements BagItem<Element, Element> {
 
     public List<SimplePoint> asPoints() {
         return asStream().map(CellInfo::getCoords).sorted().collect(Collectors.toList());
+    }
+
+    @Override
+    public String toString() {
+        return asStream()
+                .map(CellInfo::getCoords)
+                .sorted()
+                .map(SimplePoint::strKey)
+                .collect(Collectors.toList())
+                .toString();
     }
 
     @Override

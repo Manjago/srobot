@@ -1,5 +1,8 @@
 package srobot;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class Elements {
     private final Bag<Element, Element> elementBag;
 
@@ -21,5 +24,11 @@ public class Elements {
 
     public boolean contains(Element elementPretender) {
         return elementBag.contains(elementPretender);
+    }
+
+    @Override
+    public String toString() {
+        List<Element> list = elementBag.asStream().sorted().collect(Collectors.toList());
+        return list.toString();
     }
 }
