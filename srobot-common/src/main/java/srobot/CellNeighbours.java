@@ -2,6 +2,7 @@ package srobot;
 
 import javax.annotation.Nonnull;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class CellNeighbours {
@@ -11,6 +12,10 @@ public class CellNeighbours {
     public CellNeighbours(Cells cells, SimplePoint start) {
         for (int iShift = -1; iShift <= 1; ++iShift) {
             for (int jShift = -1; jShift <= 1; ++jShift) {
+
+                if (iShift == 0 && jShift == 0){
+                    continue;
+                }
 
                 final int i = start.getX() + iShift;
                 final int j = start.getY() + jShift;
@@ -36,5 +41,10 @@ public class CellNeighbours {
         Objects.requireNonNull(pretender);
 
         return data.get(pretender);
+    }
+
+    @Override
+    public String toString() {
+        return asStream().sorted().collect(Collectors.toList()).toString();
     }
 }

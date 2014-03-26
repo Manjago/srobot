@@ -19,10 +19,7 @@ public class CellInfo implements BagItem<CellInfo, SimplePoint> {
 
     @Override
     public String toString() {
-        return "CellInfo{" +
-                "cellType=" + cellType +
-                ", coords=" + coords +
-                '}';
+        return  coords.strKey() + " " +  cellType;
     }
 
     @Override
