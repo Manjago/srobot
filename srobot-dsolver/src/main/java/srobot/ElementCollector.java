@@ -1,5 +1,6 @@
 package srobot;
 
+import java.util.Arrays;
 import java.util.function.Consumer;
 
 public class ElementCollector {
@@ -32,23 +33,21 @@ public class ElementCollector {
 
     void tryAdd(Element element){
 
-        element.asStream().forEach(cellInfo -> {
-            for(SimplePoint shift : SHIFTS){
-                SimplePoint pretender = cellInfo.getCoords().add(shift);
+        element.asStream().forEach(cellInfo -> Arrays.stream(SHIFTS).forEach(shift -> {
 
-                if (cellNeighbours.containsOpened(pretender)){
-                    CellInfo cellInfoPretender = cellNeighbours.get(pretender);
-                    Element elementPretender = element.add(cellInfoPretender);
+            SimplePoint pretender = cellInfo.getCoords().add(shift);
 
-                    if (!elements.contains(elementPretender)){
-                        elements.add(elementPretender);
-                        tryAdd(elementPretender);
-                    }
+            if (cellNeighbours.containsOpened(pretender)){
+                CellInfo cellInfoPretender = cellNeighbours.get(pretender);
+                Element elementPretender = element.add(cellInfoPretender);
+
+                if (!elements.contains(elementPretender)){
+                    elements.add(elementPretender);
+                    tryAdd(elementPretender);
                 }
             }
 
-
-        });
+        }));
 
 
     }
