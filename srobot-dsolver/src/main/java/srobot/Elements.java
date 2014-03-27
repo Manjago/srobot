@@ -2,7 +2,6 @@ package srobot;
 
 import javax.annotation.Nonnull;
 import java.util.Collection;
-import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -46,8 +45,7 @@ public class Elements {
 
     @Override
     public String toString() {
-        List<Element> list = elementBag.asStream().sorted().collect(Collectors.toList());
-        return list.toString();
+        return elementBag.asStream().sorted().collect(Collectors.toList()).toString();
     }
 
     public int size() {
