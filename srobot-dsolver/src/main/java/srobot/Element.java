@@ -1,8 +1,11 @@
 package srobot;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -18,6 +21,16 @@ public class Element implements BagItem<Element, Element> {
 
     public Element(CellInfo cellInfo) {
         cellInfos.add(cellInfo);
+    }
+
+    public Element(@Nonnull Collection<CellInfo> cellInfo) {
+        Objects.requireNonNull(cellInfo);
+        cellInfo.forEach(cellInfos::add);
+    }
+
+    public Element(@Nonnull CellInfo... cellInfo) {
+        Objects.requireNonNull(cellInfo);
+        Arrays.stream(cellInfo).forEach(cellInfos::add);
     }
 
     public Stream<CellInfo> asStream() {
@@ -61,9 +74,7 @@ public class Element implements BagItem<Element, Element> {
     @Override
     public String toString() {
         return asStream()
-                .map(CellInfo::getCoords)
                 .sorted()
-                .map(SimplePoint::strKey)
                 .collect(Collectors.toList())
                 .toString();
     }

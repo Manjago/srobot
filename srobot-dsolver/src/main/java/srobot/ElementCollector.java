@@ -32,7 +32,7 @@ public class ElementCollector {
         for(SimplePoint shift : SHIFTS){
             SimplePoint pretender = lastAdded.getCoords().add(shift);
 
-            if (cellNeighbours.contains(pretender)){
+            if (cellNeighbours.containsOpened(pretender)){
                 CellInfo cellInfoPretender = cellNeighbours.get(pretender);
                 Element elementPretender = element.add(cellInfoPretender);
 

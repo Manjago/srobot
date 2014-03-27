@@ -1,6 +1,9 @@
 package srobot;
 
+import javax.annotation.Nonnull;
+import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class Elements {
@@ -10,12 +13,27 @@ public class Elements {
         elementBag = new Bag<>();
     }
 
-    public void add(Element element){
+    public Elements(@Nonnull Collection<Element> element) {
+        this();
+
+        Objects.requireNonNull(element);
+        element.forEach(elementBag::add);
+    }
+
+    public Elements(@Nonnull Element element) {
+        this();
+
+        Objects.requireNonNull(element);
         elementBag.add(element);
     }
 
     public Elements(Elements elements) {
         this.elementBag = elements.getElementBag();
+    }
+
+    public void add(@Nonnull Element element) {
+        Objects.requireNonNull(element);
+        elementBag.add(element);
     }
 
     public Bag<Element, Element> getElementBag() {
@@ -30,5 +48,29 @@ public class Elements {
     public String toString() {
         List<Element> list = elementBag.asStream().sorted().collect(Collectors.toList());
         return list.toString();
+    }
+
+    public int size() {
+        return elementBag.size();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+
+        Elements elements = (Elements) o;
+
+        return elementBag.equals(elements.elementBag);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return elementBag.hashCode();
     }
 }

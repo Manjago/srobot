@@ -41,6 +41,11 @@ public class CellNeighbours {
         return data.contains(point);
     }
 
+    public boolean containsOpened(@Nonnull SimplePoint point) {
+        Objects.requireNonNull(point, "SimplePoint == null");
+        return data.contains(point) && data.get(point).getCellType().getState() == CellType.State.OPENED;
+    }
+
     public CellInfo get(@Nonnull SimplePoint pretender) {
         Objects.requireNonNull(pretender);
 

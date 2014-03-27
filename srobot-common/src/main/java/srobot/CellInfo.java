@@ -22,7 +22,7 @@ public class CellInfo implements BagItem<CellInfo, SimplePoint> {
 
     @Override
     public String toString() {
-        return  coords.strKey() + " " +  cellType;
+        return  coords.strKey() + "-" +  cellType;
     }
 
     @Override
