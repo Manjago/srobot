@@ -15,6 +15,10 @@ public class CellInfo implements BagItem<CellInfo, SimplePoint> {
         return coords;
     }
 
+    public CellInfo(CellType cellType, int i, int j) {
+        this(cellType, new SimplePoint(i, j));
+    }
+
     public CellInfo(CellType cellType, SimplePoint coords) {
         this.cellType = cellType;
         this.coords = coords;

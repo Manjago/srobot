@@ -1,6 +1,7 @@
 package srobot;
 
 import javax.annotation.Nonnull;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -10,6 +11,13 @@ public class Elements {
 
     public Elements() {
         elementBag = new Bag<>();
+    }
+
+    public Elements(@Nonnull Element... element) {
+        this();
+
+        Objects.requireNonNull(element);
+        Arrays.stream(element).forEach(elementBag::add);
     }
 
     public Elements(@Nonnull Collection<Element> element) {

@@ -19,6 +19,10 @@ public class Element implements BagItem<Element, Element> {
         element.cellInfos.asStream().forEach(cellInfos::add);
     }
 
+    public Element(@Nonnull CellType cellType, int i, int j){
+        this(new CellInfo(cellType, new SimplePoint(i, j)));
+    }
+
     public Element(CellInfo cellInfo) {
         cellInfos.add(cellInfo);
     }
