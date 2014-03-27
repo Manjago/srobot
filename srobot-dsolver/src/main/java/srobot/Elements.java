@@ -5,59 +5,64 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Objects;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Elements {
-    private final Bag<Element, Element> elementBag;
+    private final Bag<Element, Element> elements;
 
     public Elements() {
-        elementBag = new Bag<>();
+        elements = new Bag<>();
+    }
+
+    public Stream<Element> asStream(){
+        return elements.asStream();
     }
 
     public Elements(@Nonnull Element... element) {
         this();
 
         Objects.requireNonNull(element);
-        Arrays.stream(element).forEach(elementBag::add);
+        Arrays.stream(element).forEach(elements::add);
     }
 
     public Elements(@Nonnull Collection<Element> element) {
         this();
 
         Objects.requireNonNull(element);
-        element.forEach(elementBag::add);
+        element.forEach(elements::add);
     }
 
     public Elements(@Nonnull Element element) {
         this();
 
         Objects.requireNonNull(element);
-        elementBag.add(element);
+        elements.add(element);
     }
 
     public Elements(Elements elements) {
-        this.elementBag = elements.getElementBag();
+        this.elements = elements.getElements();
     }
 
     public void add(@Nonnull Element element) {
         Objects.requireNonNull(element);
-        elementBag.add(element);
+        elements.add(element);
     }
 
-    public Bag<Element, Element> getElementBag() {
-        return new Bag<>(elementBag);
+    public Bag<Element, Element> getElements() {
+        return new Bag<>(elements);
     }
 
     public boolean contains(Element elementPretender) {
-        return elementBag.contains(elementPretender);
+        return elements.contains(elementPretender);
     }
 
     @Override
     public String toString() {
-        return elementBag.asStream().sorted().collect(Collectors.toList()).toString();
+        return elements.asStream().sorted().collect(Collectors.toList()).toString();
     }
 
     public int size() {
-        return elementBag.size();
+        return elements.size();
     }
 
     @Override
@@ -71,12 +76,12 @@ public class Elements {
 
         Elements elements = (Elements) o;
 
-        return elementBag.equals(elements.elementBag);
+        return this.elements.equals(elements.elements);
 
     }
 
     @Override
     public int hashCode() {
-        return elementBag.hashCode();
+        return elements.hashCode();
     }
 }

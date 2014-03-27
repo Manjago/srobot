@@ -1,7 +1,5 @@
 package srobot;
 
-import java.util.function.Predicate;
-
 public class AutoCellAnalyzer implements CellAnalyzer {
 
     private final Cells cells;
@@ -13,7 +11,17 @@ public class AutoCellAnalyzer implements CellAnalyzer {
     @Override
     public Prediction makePredict(CellInfo cellInfo) {
 
+        Elements elements = extractElements(cellInfo);
+
+        ElementStates elementStates = new ElementStates(elements);
+
+        calcInitialStates(elementStates);
+
         return null;
+    }
+
+    private void calcInitialStates(ElementStates elementStates) {
+
     }
 
     public Elements extractElements(CellInfo cellInfo) {

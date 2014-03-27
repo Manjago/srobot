@@ -1,7 +1,6 @@
 package srobot;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 public class ElementCollector {
 
@@ -28,7 +27,7 @@ public class ElementCollector {
     }
 
     public void accept(ElementCollector other) {
-        other.elements.getElementBag().asStream().forEach(elements::add);
+        other.elements.getElements().asStream().forEach(elements::add);
     }
 
     void tryAdd(Element element){
