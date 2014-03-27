@@ -1,7 +1,10 @@
 package srobot;
 
 import javax.annotation.Nonnull;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -26,8 +29,12 @@ public class Bag<E extends BagItem<E, K>, K> {
     @Override
     public boolean equals(Object o) {
 
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
 
         Bag bag = (Bag) o;
 
@@ -47,16 +54,20 @@ public class Bag<E extends BagItem<E, K>, K> {
         return result;
     }
 
-    public boolean contains(@Nonnull K key){
+    public boolean contains(@Nonnull K key) {
         Objects.requireNonNull(key);
         return items.containsKey(key);
     }
 
     public E get(@Nonnull K key) {
         Objects.requireNonNull(key);
-        if (!contains(key)){
+        if (!contains(key)) {
             throw new IllegalArgumentException(String.format("badKey %s", key.toString()));
         }
         return items.get(key);
+    }
+
+    public int size() {
+        return items.size();
     }
 }

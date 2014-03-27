@@ -13,7 +13,7 @@ public class CellNeighbours {
         for (int iShift = -1; iShift <= 1; ++iShift) {
             for (int jShift = -1; jShift <= 1; ++jShift) {
 
-                if (iShift == 0 && jShift == 0){
+                if (iShift == 0 && jShift == 0) {
                     continue;
                 }
 
@@ -26,6 +26,10 @@ public class CellNeighbours {
             }
         }
 
+    }
+
+    public int size() {
+        return data.size();
     }
 
     public Stream<CellInfo> asStream() {
