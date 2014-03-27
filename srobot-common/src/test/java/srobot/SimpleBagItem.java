@@ -3,11 +3,11 @@ package srobot;
 import javax.annotation.Nonnull;
 import java.util.Objects;
 
-public class TestBagItem implements BagItem<TestBagItem, Integer> {
+public class SimpleBagItem implements BagItem<SimpleBagItem, Integer> {
 
     private final int data;
 
-    public TestBagItem(int data) {
+    public SimpleBagItem(int data) {
         this.data = data;
     }
 
@@ -20,7 +20,7 @@ public class TestBagItem implements BagItem<TestBagItem, Integer> {
             return false;
         }
 
-        TestBagItem that = (TestBagItem) o;
+        SimpleBagItem that = (SimpleBagItem) o;
 
         return data == that.data;
 
@@ -37,7 +37,7 @@ public class TestBagItem implements BagItem<TestBagItem, Integer> {
     }
 
     @Override
-    public int compareTo(@Nonnull TestBagItem o) {
+    public int compareTo(@Nonnull SimpleBagItem o) {
         Objects.requireNonNull(o);
 
         return Integer.valueOf(data).compareTo(o.data);
