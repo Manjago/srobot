@@ -15,7 +15,5 @@ public class CellNeighboursTest {
         TestCase.assertEquals(new CellInfo(CellType.CLOSED, new SimplePoint(1, 0)), cn.get(new SimplePoint(1, 0)));
         TestCase.assertEquals(new CellInfo(CellType.BOMB, new SimplePoint(1, 1)), cn.get(new SimplePoint(1, 1)));
 
-        System.out.println(cn);
-
     }
 }
