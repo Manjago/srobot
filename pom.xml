@@ -10,6 +10,7 @@
         <module>srobot-common</module>
         <module>srobot-rsolver</module>
         <module>srobot-dsolver</module>
+        <module>srobot-jmine</module>
     </modules>
     <packaging>pom</packaging>
 
