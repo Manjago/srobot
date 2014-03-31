@@ -147,5 +147,13 @@ public class BruteFinderTest {
         TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("normalState.png"))).size());
     }
 
+    @Test
+    public void testDigit010012() throws Exception {
+        BufferedImage big = Loader.load("digit-010-012.png");
 
+        TestCase.assertEquals(3, new BruteFinder().find(big, new SearchPattern(Loader.load("digit-0.png"))).size());
+        TestCase.assertEquals(2, new BruteFinder().find(big, new SearchPattern(Loader.load("digit-1.png"))).size());
+        TestCase.assertEquals(1, new BruteFinder().find(big, new SearchPattern(Loader.load("digit-2.png"))).size());
+        TestCase.assertEquals(0, new BruteFinder().find(big, new SearchPattern(Loader.load("digit-3.png"))).size());
+    }
 }
