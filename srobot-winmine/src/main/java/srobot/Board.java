@@ -24,10 +24,12 @@ public class Board {
     public Board(SimplePoint resolvedLeftCorner, BufferedImage big) {
         this.resolvedLeftCorner = resolvedLeftCorner;
         this.big = big;
+        minesCountResolver = new MinesCountResolver(big);
     }
 
     private final SimplePoint resolvedLeftCorner;
     private final BufferedImage big;
+    private final MinesCountResolver minesCountResolver;
     private NavigableSet<Integer> xCoord;
     private NavigableSet<Integer> yCoord;
 
@@ -164,12 +166,12 @@ public class Board {
     }
 
 
-    public BoardState getState() {
+    public BoardStateIcon getState() {
 
         for (Map.Entry<BoardState, SearchPattern> state : STATES.entrySet()) {
             SimplePoint point = FINDER.findOne(big, state.getValue());
             if (point != null) {
-                return state.getKey();
+                return new BoardStateIcon(state.getKey(), point);
             }
         }
         return null;
@@ -195,5 +197,8 @@ public class Board {
         return null;
     }
 
+    public int getMinesCount(SimplePoint coord) {
+        return minesCountResolver.getMinesCount(coord);
+    }
 }
 

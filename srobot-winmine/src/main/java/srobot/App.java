@@ -87,7 +87,8 @@ public class App {
 
             board = new Board(simpleRectangle.getLeftCorner(), image);
 
-            boardState = board.getState();
+            BoardStateIcon boardStateIcon = board.getState();
+            boardState = boardStateIcon != null ? boardStateIcon.getBoardState() : null;
 
             if (boardState == null) {
                 --retryCount;
@@ -121,6 +122,11 @@ public class App {
                 } else {
                     break;
                 }
+
+                // пока что просто резолвим и выбрасываем
+                // будем использовать, когда доведем до ума srobot-dsolver
+                int minesCount = board.getMinesCount(boardStateIcon.getCoord());
+
 
             }
 
